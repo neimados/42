@@ -26,6 +26,11 @@ void    ft_putstr(arglist *lst, int *count)
 
     i = 0;
 	str = va_arg(lst->args, char *);
+    if (str == NULL)
+    {
+        *count += write(1, "(null)", 6);
+        return ;
+    }
 	if (lst->nb2 >= ft_strlen(str) || lst->nb2 == 0)
 		size = ft_strlen(str);
 	else

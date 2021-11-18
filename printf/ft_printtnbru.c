@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-static void    ft_putleft(arglist *lst, long nb, char *str, int *count)
+static void    ft_putleftu(arglist *lst, char *str, int *count)
 {
     int i;
 	int max;
@@ -24,7 +24,7 @@ static void    ft_putleft(arglist *lst, long nb, char *str, int *count)
 	}
 }
 
-static void    ft_putright(arglist *lst, long nb, char *str, int *count)
+static void    ft_putrightu(arglist *lst, char *str, int *count)
 {
 	int i;
 	int max;
@@ -54,6 +54,32 @@ static void    ft_putright(arglist *lst, long nb, char *str, int *count)
 	write(1, str, ft_strlen(str));
 }
 
+static char	*ft_putlong (long nb)
+{
+	int	i;
+	char *str;
+	unsigned long tmp;
+
+	i = 0;
+	nb = -nb;
+	tmp = 4294967295 - nb + 1;
+	while (tmp != 0)
+	{
+		tmp /= 10;
+		i++;
+	}
+	tmp = 4294967295 - nb + 1;
+	str = malloc(sizeof(char) * (i + 1));
+	str[i--] = '\0';
+	while (i >= 0)
+	{
+		str[i] = (tmp % 10) + '0';
+		tmp /= 10;
+		i--;
+	}
+	return (str);
+}
+
 void	ft_putnbru(arglist *lst, int *count)
 {
 	int i;
@@ -62,11 +88,15 @@ void	ft_putnbru(arglist *lst, int *count)
 
 	i = 0;
 	nb = va_arg(lst->args, int);
-	str = ft_itoa(nb);
+	if (nb < 0)
+		str = ft_putlong(nb);
+	else
+		str = ft_itoa(nb);
     if (lst->minus >= 1)
-        ft_putleft(lst, nb, str, count);
+        ft_putleftu(lst, str, count);
     else
-        ft_putright(lst, nb, str, count);
+        ft_putrightu(lst, str, count);
+	free(str);
 }
 
 

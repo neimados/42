@@ -79,6 +79,7 @@ void	ft_putnbr(arglist *lst, int *count)
         ft_putleft(lst, nb, str, count);
     else
         ft_putright(lst, nb, str, count);
+	free(str);
 }
 
 

@@ -59,6 +59,8 @@ int ft_printargs(const char *s, int i, arglist *lst)
         ft_putnbr(lst, &count);
     else if (s[i] == 'u')
         ft_putnbru(lst, &count);
+    else if (s[i] == 'x')
+        ft_putx(lst, &count);
     return (count);
 }
 
@@ -89,16 +91,29 @@ int    ft_printf(const char *s, ...)
         i++;
     }
     va_end(lst->args);
+    free(lst);
     return (count);
 }
 
 int main()
 {
-	printf("%i", printf("%010x", 123));
-	printf("\n");
+	//printf("%i", printf("%010x", 123));
+	//printf("\n");
 	//printf("%i", ft_printf("%-5.15u", 123));
 
-    //printf("%d", printf("%2.10s", "coucou"));
+    //printf("%d", printf(" NULL %s NULL ", NULL));
 	//printf("\n");
-	//printf("%d", ft_printf("%2.10s", "coucou"));
+	//printf("%d", ft_printf(" NULL %s NULL ", NULL));
+    
+    //printf("%d", printf(" %d ", 9));
+    //printf("\n");
+    //printf("%d", ft_printf(" %d ", 9));
+
+    //printf("%d", printf(" %u ", -1));
+    //printf("\n");
+    //printf("%d", ft_printf(" %u ", -1));
+
+    printf("%d", printf("%#-8x ", 12345));
+    printf("\n");
+    //printf("%x", ft_printf(" %u ", -1));
 }
