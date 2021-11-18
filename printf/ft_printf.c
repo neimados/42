@@ -1,87 +1,100 @@
 #include "ft_printf.h"
 
-
-arglist	*ft_initlst(arglist *lst)
+void    ft_initlst(arglist *lst)
 {
-	lst->size = 0;
-	lst->zero = 0;
-	lst->plus = 0;
-	lst->minus = 0;
-	lst->dot = 0;
-	lst->space = 0;
-	lst->percent = 0;
-	return (lst);
+    lst->space = 0;
+    lst->zero = 0;
+    lst->plus = 0;
+    lst->minus = 0;
+    lst->hash = 0;
+    lst->dot = 0;
+    lst->size = 0;
+    lst->nb1 = 0;
+    lst->nb2 = 0;
 }
 
-int	ft_checkflags(const char *format, int i, arglist *lst)
+int    ft_checkflags(const char *s, int i, arglist *lst)
 {
-	int count;
-
-	count = 0;
-	while (format[i] != 'c' || format[i] != 's' || format[i] != 'p'
-	|| format[i] != 'd'|| format[i] != 'i'|| format[i] != 'u'
-	|| format[i] != 's'|| format[i] != 'x' || format[i] != 'X'
-	|| format[i] != '%')
-	{
-		if (format[i] == ' ')
-			lst->space++;
-		else if (format[i] == '0')
-			lst->zero++;
-		else if (format[i] == '+')
-		{	
-			lst->plus++;
-			count++;
-		}
-		else if (format[i] == '-')
-		{
-			lst->minus++;
-			count++;
-		}
-		else if (format[i] == '.')
-		{
-			lst->dot++;
-			count++;
-		}
-		i++;
-	}
-	if (count != 1)
-		return (-1);
-	return (i - 1);
+    while (ft_strchr("cspdiuxX", s[i]) == NULL && s[i] != '%')
+    {
+        if (s[i] == '#')
+            lst->hash++;
+        else if (s[i] == ' ')
+            lst->space++;
+        else if (s[i] == '+')
+            lst->plus++;
+        else if (s[i] == '-')
+            lst->minus++;
+        else if (s[i] == '0' && (s[i - 1] > '9' || s[i - 1] < '0'))
+            lst->zero++;
+        else if (s[i] >= '0' && s[i] <= '9' && lst->dot == 0)
+        {
+            lst->nb1 *= 10;
+            lst->nb1 += s[i] - '0';
+        }
+        else if (s[i] == '.')
+            lst->dot++;
+        else if (s[i] >= '0' && s[i] <= '9' && lst->dot >= 1)
+        {
+            lst->nb2 *= 10;
+            lst->nb2 += s[i] - '0';
+        }
+        i++;
+    }
+    return (i);
 }
 
-
-
-int	ft_printf(const char *format, ...)
+int ft_printargs(const char *s, int i, arglist *lst)
 {
-	int	i;
-	int	count;
-	arglist *lst;
+    int count;
 
-	i = 0;
-	count = 0;
-	lst = (arglist *)malloc(sizeof(arglist));
-	if (!lst)
-		return (-1);
-	ft_initlst(lst);
-	va_start(lst->args, format);
-	while (format[i])
-	{
-		if (format[i] == '%')
-		{
-			i++;
-			i = ft_checkflags(format, i, lst);
-			if (i == -1)
-				return (-1);
-			count += ft_checkargs(format[i], lst);
-		}
-		else
-			count += write(1, &format[i], 1);
-		i++;
-	}
-	va_end(lst->args);
+    count = 0;
+    if (s[i] == 'c')
+        ft_putchar(lst, &count);
+    else if (s[i] == 's')
+        ft_putstr(lst, &count);
+	else if (s[i] == '%')
+		count += write(1, "%", 1);
+	else if (s[i] == 'd' || s[i] == 'i')
+        ft_putnbr(lst, &count);
+    else if (s[i] == 'u')
+        ft_putnbru(lst, &count);
+    return (count);
+}
+
+int    ft_printf(const char *s, ...)
+{
+    int    i;
+    int count;
+    arglist *lst;
+
+    i = 0;
+    count = 0;
+    lst = (arglist *)malloc(sizeof(arglist));
+    if (!lst)
+        return (-1);
+    ft_initlst(lst);
+    va_start(lst->args, s);
+    while (s[i])
+    {
+        if (s[i] == '%')
+        {
+            i++;
+            i = ft_checkflags(s, i, lst);
+            count += ft_printargs(s, i, lst);
+            ft_initlst(lst);
+        }
+        else
+            count += write(1, &s[i], 1);
+        i++;
+    }
+    va_end(lst->args);
+    return (count);
 }
 
 int main()
 {
-	printf("% d", printf("%.1s%7d", "AAA", 123));
+	printf("%d", printf("%+2.20d ", 123));
+	printf("\n");
+	printf("%d", ft_printf("%+2.20d ", 123));
 }
