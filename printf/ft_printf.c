@@ -94,7 +94,11 @@ int    ft_printf(const char *s, ...)
 
 int main()
 {
-	printf("%d", printf("%+2.20d ", 123));
+	printf("%i", printf("%010x", 123));
 	printf("\n");
-	printf("%d", ft_printf("%+2.20d ", 123));
+	//printf("%i", ft_printf("%-5.15u", 123));
+
+    //printf("%d", printf("%2.10s", "coucou"));
+	//printf("\n");
+	//printf("%d", ft_printf("%2.10s", "coucou"));
 }

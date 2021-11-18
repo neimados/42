@@ -30,7 +30,7 @@ char    *ft_strchr(const char *str, int c);
 int 	ft_strlen(const char *str);
 void	ft_percent(arglist *lst, int *count);
 void	ft_putnbr(arglist *lst, int *count);
-char	*ft_itoa(int n);
 void	ft_putnbru(arglist *lst, int *count);
+char	*ft_itoa(int n);
 
 #endif
