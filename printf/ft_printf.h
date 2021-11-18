@@ -32,6 +32,7 @@ void	ft_percent(arglist *lst, int *count);
 void	ft_putnbr(arglist *lst, int *count);
 void	ft_putnbru(arglist *lst, int *count);
 char	*ft_itoa(int n);
-void	ft_putx(arglist *lst, int *count);
+void	ft_putx(arglist *lst, int *count, char c);
+char	*ft_putnbr_base(long nb, char *base);
 
 #endif

@@ -59,8 +59,8 @@ int ft_printargs(const char *s, int i, arglist *lst)
         ft_putnbr(lst, &count);
     else if (s[i] == 'u')
         ft_putnbru(lst, &count);
-    else if (s[i] == 'x')
-        ft_putx(lst, &count);
+    else if (s[i] == 'x' || s[i] == 'X')
+        ft_putx(lst, &count, s[i]);
     return (count);
 }
 
@@ -113,7 +113,7 @@ int main()
     //printf("\n");
     //printf("%d", ft_printf(" %u ", -1));
 
-    printf("%d", printf("%#-8x ", 12345));
+    printf("%d", printf("%x ", 0));
     printf("\n");
-    //printf("%x", ft_printf(" %u ", -1));
+    printf("%d", ft_printf("%x ", 0));
 }
