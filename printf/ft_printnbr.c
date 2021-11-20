@@ -1,11 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printnbr.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 10:30:53 by dso               #+#    #+#             */
+/*   Updated: 2021/11/19 10:30:55 by dso              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static void    ft_putleft(arglist *lst, long nb, char *str, int *count)
 {
     int i;
+	int	size;
 	int max;
 
-	i = ft_strlen(str);
+	size = ft_strlen(str);
+	i = size;
 	max = 0;
 	if (lst->nb2 > lst->nb1)
 		max += lst->nb2;
@@ -13,14 +27,14 @@ static void    ft_putleft(arglist *lst, long nb, char *str, int *count)
 		max += lst->nb1;
 	if (lst->plus >= 1 && nb >= 0)
 		*count += write(1, "+", 1);
-	else if (lst->plus == 0 && lst->space >= 1)
+	else if (lst->plus == 0 && lst->space >= 1 && nb >= 0)
 		*count += write(1, " ", 1);
 	while (i < lst->nb2)
 	{
 		*count += write(1, "0", 1);
 		i++;
 	}
-	*count += write(1, str, ft_strlen(str));
+	*count += write(1, str, size);
 	while (*count < max)
 	{
 		*count += write(1, " ", 1);
@@ -45,7 +59,7 @@ static void    ft_putright(arglist *lst, long nb, char *str, int *count)
 		*count += ft_strlen(str);
 	if (lst->plus >= 1 && nb >= 0)
 		*count += 1;
-	else if (lst->plus == 0 && lst->space >= 1)
+	else if (lst->plus == 0 && lst->space >= 1 && nb >= 0)
 		*count += write(1, " ", 1);
 	if (lst->plus >= 1 && lst->zero >= 1 && nb >= 0)
 		write(1, "+", 1);
@@ -81,5 +95,3 @@ void	ft_putnbr(arglist *lst, int *count)
         ft_putright(lst, nb, str, count);
 	free(str);
 }
-
-

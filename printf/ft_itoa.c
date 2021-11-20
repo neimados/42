@@ -1,90 +1,67 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 10:26:54 by dso               #+#    #+#             */
+/*   Updated: 2021/11/19 10:26:56 by dso              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-char	*ft_strdup(char *src)
+static int	checklength(long n)
 {
-	int		i;
-	int		len;
-	char	*str;
+	int	i;
 
-	len = 0;
-	while (src[len])
-		len++;
-	str = (char*)malloc(sizeof(*str) * (len + 1));
-	i = 0;
-	while (i < len)
+	i = 1;
+	if (n <= 0)
 	{
-		str[i] = src[i];
+		n = -n;
 		i++;
 	}
-	return (str);
-}
-
-static int	ft_nbr_del(int n)
-{
-	int		d;
-
-	d = 0;
-	if (n == 0)
-		return (1);
 	while (n != 0)
 	{
-		n = n / 10;
-		++d;
+		i++;
+		n /= 10;
 	}
-	return (d);
+	return (i);
 }
 
-static char	*ft_plus_int(int n, int len)
+void	fillstr(long nb, int size, char *str)
 {
-	char	*ss;
-
-	ss = (char *)malloc(sizeof(*ss) * (len + 1));
-	if (ss != 0)
+	while (nb != 0)
 	{
-		ss[len] = '\0';
-		len--;
-		while (len >= 0)
-		{
-			ss[len] = ((n % 10) + '0');
-			n = n / 10;
-			len--;
-		}
-		return (ss);
+		str[size - 2] = (nb % 10) + '0';
+		size--;
+		nb /= 10;
 	}
-	return (NULL);
-}
-
-static char	*ft_mius_int(int n, int len)
-{
-	char	*ss;
-
-	ss = (char *)malloc(sizeof(*ss) * (len + 2));
-	if (ss != 0)
-	{
-		len++;
-		ss[len] = '\0';
-		len--;
-		ss[0] = '-';
-		while (len > 0)
-		{
-			ss[len] = ((n % 10) + '0');
-			n = n / 10;
-			len--;
-		}
-		return (ss);
-	}
-	return (NULL);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*ss;
-	int		len;
+	char	*str;
+	int		size;
+	int		minus;
+	long	nb;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	len = ft_nbr_del(n);
-	if (n >= 0)
-		return (ss = ft_plus_int(n, len));
-	return (ss = ft_mius_int((n * -1), len));
+	minus = 0;
+	nb = n;
+	size = checklength(nb);
+	if (nb < 0)
+	{
+		nb = -nb;
+		minus++;
+	}
+	str = ft_calloc(size, sizeof(char));
+	if (!str)
+		return (NULL);
+	if (n == 0)
+		*str = '0';
+	fillstr(nb, size, str);
+	if (minus != 0)
+		str[0] = '-';
+	return (str);
 }

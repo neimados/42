@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printnbru.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 10:31:28 by dso               #+#    #+#             */
+/*   Updated: 2021/11/19 10:31:30 by dso              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 static void    ft_putleftu(arglist *lst, char *str, int *count)
@@ -98,5 +110,3 @@ void	ft_putnbru(arglist *lst, int *count)
         ft_putrightu(lst, str, count);
 	free(str);
 }
-
-

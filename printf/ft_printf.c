@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/19 10:29:31 by dso               #+#    #+#             */
+/*   Updated: 2021/11/19 10:29:36 by dso              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 void    ft_initlst(arglist *lst)
@@ -61,6 +73,8 @@ int ft_printargs(const char *s, int i, arglist *lst)
         ft_putnbru(lst, &count);
     else if (s[i] == 'x' || s[i] == 'X')
         ft_putx(lst, &count, s[i]);
+	else if (s[i] == 'p')
+        ft_putp(lst, &count);
     return (count);
 }
 
@@ -95,25 +109,35 @@ int    ft_printf(const char *s, ...)
     return (count);
 }
 
-int main()
-{
-	//printf("%i", printf("%010x", 123));
-	//printf("\n");
-	//printf("%i", ft_printf("%-5.15u", 123));
+// int main()
+// {
+// 	//printf("%i", printf("%-.8d ", -1));
+// 	//printf("\n");
+// 	//printf("%i", ft_printf("%-.8d ", -1));
 
-    //printf("%d", printf(" NULL %s NULL ", NULL));
-	//printf("\n");
-	//printf("%d", ft_printf(" NULL %s NULL ", NULL));
+//     //printf("%d", printf("%.s ", "-"));
+// 	//printf("\n");
+// 	//printf("%d", ft_printf("%.s ", "-"));
     
-    //printf("%d", printf(" %d ", 9));
-    //printf("\n");
-    //printf("%d", ft_printf(" %d ", 9));
+//     //printf("%d", printf("%.12d ", -1));
+//     //printf("\n");
+//     //printf("%d", ft_printf("%.12d ", -1));
 
-    //printf("%d", printf(" %u ", -1));
-    //printf("\n");
-    //printf("%d", ft_printf(" %u ", -1));
+//     //printf("%d", printf(" %u ", -1));
+//     //printf("\n");
+//     //printf("%d", ft_printf(" %u ", -1));
 
-    printf("%d", printf("%x ", 0));
-    printf("\n");
-    printf("%d", ft_printf("%x ", 0));
-}
+//     //printf("%d", printf("%-13x ", UINT_MAX));
+//     //printf("\n");
+//     //printf("%d", ft_printf("%-13x ", UINT_MAX));
+
+// 	printf("%d", printf("%#x ", 0));
+//     printf("\n");
+//     printf("%d", ft_printf("%#x ", 0));
+
+// 	//char *str = "test";
+// 	//int tab[] = {0, 0};
+// 	//printf("%d", printf("%p ", (void *)0));
+//     //printf("\n");
+//     //printf("%d", ft_printf("%p ", (void *)0));
+// }

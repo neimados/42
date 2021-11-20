@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <marvin@42.fr>                         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/15 13:55:26 by dso               #+#    #+#             */
+/*   Updated: 2021/11/15 13:55:29 by dso              ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
+# include <limits.h>
 # include <stdio.h>
 # include <stdarg.h>
 # include <unistd.h>
@@ -33,6 +46,9 @@ void	ft_putnbr(arglist *lst, int *count);
 void	ft_putnbru(arglist *lst, int *count);
 char	*ft_itoa(int n);
 void	ft_putx(arglist *lst, int *count, char c);
-char	*ft_putnbr_base(long nb, char *base);
+char	*ft_putnbr_base(unsigned long nb, char *base);
+void	ft_putp(arglist *lst, int *count);
+char	*ft_putnbr_basep(unsigned long long nb, char *base);
+void	*ft_calloc(size_t count, size_t size);
 
 #endif
