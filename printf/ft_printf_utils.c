@@ -12,6 +12,19 @@
 
 #include "ft_printf.h"
 
+void	ft_initlst(t_arglist *lst)
+{
+	lst->space = 0;
+	lst->zero = 0;
+	lst->plus = 0;
+	lst->minus = 0;
+	lst->hash = 0;
+	lst->dot = 0;
+	lst->size = 0;
+	lst->nb1 = 0;
+	lst->nb2 = 0;
+}
+
 int	ft_strlen(const char *str)
 {
 	int	i;

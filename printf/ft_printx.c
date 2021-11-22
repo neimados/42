@@ -12,10 +12,10 @@
 
 #include "ft_printf.h"
 
-static void	ft_putxleft(arglist *lst, char *str, int *count, char c)
+static void	ft_putxleft(t_arglist *lst, char *str, int *count, char c)
 {
-    int i;
-	int max;
+	int	i;
+	int	max;
 
 	i = ft_strlen(str);
 	max = 0;
@@ -41,14 +41,10 @@ static void	ft_putxleft(arglist *lst, char *str, int *count, char c)
 	}
 }
 
-static void	ft_putxright(arglist *lst, char *str, int *count, char c)
+static int	ft_checkxright(t_arglist *lst, int *count, int size, char c)
 {
-	int i;
-	int size;
-	int max;
+	int	max;
 
-	size = ft_strlen(str);
-	i = size;
 	max = 0;
 	if (lst->nb2 > lst->nb1)
 		max += lst->nb2;
@@ -65,6 +61,18 @@ static void	ft_putxright(arglist *lst, char *str, int *count, char c)
 		write(1, "0", 1);
 		write(1, &c, 1);
 	}
+	return (max);
+}
+
+static void	ft_putxright(t_arglist *lst, char *str, int *count, char c)
+{
+	int	i;
+	int	size;
+	int	max;
+
+	size = ft_strlen(str);
+	i = size;
+	max = ft_checkxright(lst, count, size, c);
 	while (*count < max)
 	{
 		if (lst->zero >= 1)
@@ -85,23 +93,29 @@ static void	ft_putxright(arglist *lst, char *str, int *count, char c)
 	write(1, str, ft_strlen(str));
 }
 
-void	ft_putx(arglist *lst, int *count, char c)
+static int	ft_checkx(t_arglist *lst, int *count, int nb)
 {
-	long size;
-	unsigned long nb;
-	char *str;
-
-	nb = va_arg(lst->args, unsigned int);
 	if (nb == 0 && lst->hash >= 1)
 	{
 		*count += write(1, "0", 1);
-		return ;
+		return (1);
 	}
+	return (0);
+}
+
+void	ft_putx(t_arglist *lst, int *count, char c)
+{
+	long			size;
+	unsigned long	nb;
+	char			*str;
+
+	nb = va_arg(lst->args, unsigned int);
+	if (ft_checkx(lst, count, nb) == 1)
+		return ;
 	else if (nb == 0)
 	{
-		str = malloc(sizeof(char) * 2);
+		str = ft_calloc(sizeof(char), 2);
 		str[0] = '0';
-		str[1] = '\0';
 	}
 	else
 	{

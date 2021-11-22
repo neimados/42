@@ -12,50 +12,57 @@
 
 #include "ft_printf.h"
 
-void    ft_putchar(arglist *lst, int *count)
+void	ft_putchar(t_arglist *lst, int *count)
 {
-    int    i;
-    char    b;
+	int		i;
+	char	b;
 
-    i = 0;
-    b = va_arg(lst->args, int);
-    if (lst->minus >= 1)
-        *count += write(1, &b, 1);
-    while (i < lst->nb1 - 1)
-    {
-        *count += write(1, " ", 1);
-        i++;
-    }
-    if (lst->minus == 0)
-        *count += write(1, &b, 1);
+	i = 0;
+	b = va_arg(lst->args, int);
+	if (lst->minus >= 1)
+		*count += write(1, &b, 1);
+	while (i < lst->nb1 - 1)
+	{
+		*count += write(1, " ", 1);
+		i++;
+	}
+	if (lst->minus == 0)
+		*count += write(1, &b, 1);
 }
 
-void    ft_putstr(arglist *lst, int *count)
+static int	ft_checkstr(t_arglist *lst, int *count, char *str)
 {
-    int    i;
-	int size;
-    char    *str;
+	if (lst->dot >= 1 && (lst->nb1 == 0 && lst->nb2 == 0))
+		return (1);
+	if (str == NULL)
+	{
+		*count += write(1, "(null)", 6);
+		return (1);
+	}
+	return (0);
+}
 
-    i = 0;
-    if (lst->dot >= 1 && (lst->nb1 == 0&& lst->nb2 == 0))
-        return ;
+void	ft_putstr(t_arglist *lst, int *count)
+{
+	int		i;
+	int		size;
+	char	*str;
+
+	i = 0;
 	str = va_arg(lst->args, char *);
-    if (str == NULL)
-    {
-        *count += write(1, "(null)", 6);
-        return ;
-    }
+	if (ft_checkstr(lst, count, str) == 1)
+		return ;
 	if (lst->nb2 >= ft_strlen(str) || lst->nb2 == 0)
 		size = ft_strlen(str);
 	else
 		size = lst->nb2;
-    if (lst->minus >= 1)
-        *count += write(1, str, size);
-    while (i < lst->nb1 - size)
-    {
-        *count += write(1, " ", 1);
-        i++;
-    }
-    if (lst->minus == 0)
-        *count += write(1, str, size);
+	if (lst->minus >= 1)
+		*count += write(1, str, size);
+	while (i < lst->nb1 - size)
+	{
+		*count += write(1, " ", 1);
+		i++;
+	}
+	if (lst->minus == 0)
+		*count += write(1, str, size);
 }

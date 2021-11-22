@@ -12,10 +12,10 @@
 
 #include "ft_printf.h"
 
-static void    ft_putleftp(arglist *lst, char *str, int *count, int size)
+static void	ft_putleftp(t_arglist *lst, char *str, int *count, int size)
 {
-    int i;
-	int max;
+	int	i;
+	int	max;
 
 	i = size;
 	max = lst->nb1;
@@ -28,10 +28,10 @@ static void    ft_putleftp(arglist *lst, char *str, int *count, int size)
 	}
 }
 
-static void    ft_putrightp(arglist *lst, char *str, int *count, int size)
+static void	ft_putrightp(t_arglist *lst, char *str, int *count, int size)
 {
-	int i;
-	int max;
+	int	i;
+	int	max;
 
 	i = size;
 	max = lst->nb1;
@@ -42,11 +42,11 @@ static void    ft_putrightp(arglist *lst, char *str, int *count, int size)
 	write(1, str, size);
 }
 
-void	ft_putp(arglist *lst, int *count)
+void	ft_putp(t_arglist *lst, int *count)
 {
 	unsigned long long	addr;
-	char			*str;
-	int size;
+	char				*str;
+	int					size;
 
 	addr = va_arg(lst->args, unsigned long);
 	if (addr == 0)

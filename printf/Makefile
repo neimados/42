@@ -11,7 +11,7 @@ CC		= gcc
 RM		= rm -f
 CFLAGS = -Wall -Wextra -Werror
  
-%.o: %.c libft.h
+%.o: %.c ft_printf.h
 		${CC} ${CFLAGS} -c -o $@ $<
  
 $(NAME): ${OBJS}

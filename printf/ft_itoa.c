@@ -17,11 +17,6 @@ static int	checklength(long n)
 	int	i;
 
 	i = 1;
-	if (n <= 0)
-	{
-		n = -n;
-		i++;
-	}
 	while (n != 0)
 	{
 		i++;
@@ -30,7 +25,7 @@ static int	checklength(long n)
 	return (i);
 }
 
-void	fillstr(long nb, int size, char *str)
+static void	fillstr(long nb, int size, char *str)
 {
 	while (nb != 0)
 	{
@@ -44,24 +39,17 @@ char	*ft_itoa(int n)
 {
 	char	*str;
 	int		size;
-	int		minus;
 	long	nb;
 
-	minus = 0;
 	nb = n;
-	size = checklength(nb);
 	if (nb < 0)
-	{
 		nb = -nb;
-		minus++;
-	}
-	str = ft_calloc(size, sizeof(char));
+	size = checklength(nb);
+	str = ft_calloc(size, sizeof(char) + 1);
 	if (!str)
 		return (NULL);
 	if (n == 0)
 		*str = '0';
 	fillstr(nb, size, str);
-	if (minus != 0)
-		str[0] = '-';
 	return (str);
 }
