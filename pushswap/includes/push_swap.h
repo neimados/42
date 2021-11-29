@@ -35,5 +35,7 @@ void	ft_rr(t_stack *stacka, t_stack *stackb);
 void	ft_rra(t_stack *stacka);
 void	ft_rrb(t_stack *stackb);
 void	ft_rrr(t_stack *stacka, t_stack *stackb);
+int		ft_checkorder(t_stack *stacka);
+int		ft_stacklen(t_stack *stack);
 
 #endif

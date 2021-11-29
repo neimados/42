@@ -1,40 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_swap.c                                          :+:      :+:    :+:   */
+/*   ft_sort.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/29 10:49:22 by dso               #+#    #+#             */
-/*   Updated: 2021/11/29 17:33:32 by dso              ###   ########.fr       */
+/*   Created: 2021/11/29 15:24:19 by dso               #+#    #+#             */
+/*   Updated: 2021/11/29 17:18:06 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 
-void	ft_sa(t_stack *stacka)
+int	ft_checkorder(t_stack *stacka)
 {
-	t_node *first;
-	t_node *second;
+	t_node	*tmp;
 
-	if (stacka == NULL || stacka->top->prev == NULL)
-		return ;
-	first = stacka->top;
-	second = stacka->top->prev;
-	first->prev = second->prev;
-	first->next = second;
-	second->next = NULL;
-	second->prev = first;
-	stacka->top = second;
-}
-
-void	ft_sb(t_stack *stackb)
-{
-	ft_sa(stackb);
-}
-
-void	ft_ss(t_stack *stacka, t_stack *stackb)
-{
-	ft_sa(stacka);
-	ft_sb(stackb);
+	tmp = stacka->top;
+	while (tmp->prev != NULL)
+	{
+		if (tmp->value > tmp->prev->value)
+			return (1);
+		tmp = tmp->prev;
+	}
+	return (0);
 }

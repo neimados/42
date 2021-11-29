@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/11/29 15:16:34 by dso              ###   ########.fr       */
+/*   Updated: 2021/11/29 17:36:58 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 	t_stack *stacka;
 	t_stack *stackb;
 	t_node	*tmp;
+	int 	size;
 
 	stacka = ft_initstack();
 	stackb = ft_initstack();
@@ -35,14 +36,24 @@ int main(int argc, char **argv)
 	//ft_pb(stacka, stackb);
 	//ft_ss(stacka, stackb);
 	//ft_ra(stacka);
-	ft_pb(stacka, stackb);
-	ft_pb(stacka, stackb);
-	ft_pb(stacka, stackb);
-	ft_pb(stacka, stackb);
-	// ft_rr(stacka, stackb);
-	ft_rrr(stacka, stackb);
-	
+	// ft_pb(stacka, stackb);
+	// ft_pb(stacka, stackb);
+	// ft_pb(stacka, stackb);
+	// ft_pb(stacka, stackb);
+	// // ft_rr(stacka, stackb);
+	// ft_rrr(stacka, stackb);
+	size = ft_stacklen(stacka);
+	while (ft_checkorder(stacka) != 0)
+	{
+		if (size == 2)
+		{
+			ft_sa(stacka);
+			write(1, "sa", 2);
+		}
+	}
+
 	tmp = stacka->top;
+	printf("\n");
 	while (tmp != NULL)
 	{
 		printf("a : %d\n", tmp->value);
