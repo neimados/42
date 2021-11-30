@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_rotate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 12:09:00 by dso               #+#    #+#             */
-/*   Updated: 2021/11/29 14:11:23 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/01 00:07:16 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,25 @@ void	ft_ra(t_stack *stacka)
 	first->prev = NULL;
 	stacka->bottom->prev = first;
 	stacka->bottom = first;
+	write(1, "ra", 2);
 }
 
 void	ft_rb(t_stack *stackb)
 {
-	ft_ra(stackb);
+	t_node	*first;
+	t_node	*second;
+
+	if (stackb->top->prev == NULL)
+		return ;
+	first = stackb->top;
+	second = stackb->top->prev;
+	second->next = NULL;
+	stackb->top = second;
+	first->next = stackb->bottom;
+	first->prev = NULL;
+	stackb->bottom->prev = first;
+	stackb->bottom = first;
+	write(1, "rb", 2);
 }
 
 void	ft_rr(t_stack *stacka, t_stack *stackb)

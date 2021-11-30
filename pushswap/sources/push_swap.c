@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/11/29 17:36:58 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/01 00:17:16 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,20 @@ int main(int argc, char **argv)
 	// // ft_rr(stacka, stackb);
 	// ft_rrr(stacka, stackb);
 	size = ft_stacklen(stacka);
-	while (ft_checkorder(stacka) != 0)
+	if (ft_checkorder(stacka) == 1)
 	{
 		if (size == 2)
 		{
-			ft_sa(stacka);
+			ft_sa(stacka, size);
 			write(1, "sa", 2);
 		}
+		else if (size == 3)
+			ft_checkthree(stacka, size);
 	}
-
 	tmp = stacka->top;
+	// printf("\ntop : %d\n", stacka->top->value);
+	// printf("bottom : %d\n", stacka->bottom->value);
+	
 	printf("\n");
 	while (tmp != NULL)
 	{

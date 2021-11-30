@@ -24,9 +24,9 @@ void	ft_push_top(t_stack *stack, int value);
 void	ft_push_bottom(t_stack *stack, int value);
 int		ft_parse(int argc, char **argv, t_stack *stack);
 int		ft_checkargs(long nb, t_stack *stack);
-void	ft_sa(t_stack *stacka);
-void	ft_sb(t_stack *stackb);
-void	ft_ss(t_stack *stacka, t_stack *stackb);
+void	ft_sa(t_stack *stacka, int size);
+void	ft_sb(t_stack *stackb, int size);
+void	ft_ss(t_stack *stacka, t_stack *stackb, int size);
 void	ft_pb(t_stack *stacka, t_stack *stackb);
 void	ft_pa(t_stack *stacka, t_stack *stackb);
 void	ft_ra(t_stack *stacka);
@@ -37,5 +37,6 @@ void	ft_rrb(t_stack *stackb);
 void	ft_rrr(t_stack *stacka, t_stack *stackb);
 int		ft_checkorder(t_stack *stacka);
 int		ft_stacklen(t_stack *stack);
+void	ft_checkthree(t_stack *stacka, int size);
 
 #endif

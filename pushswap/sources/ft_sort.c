@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sort.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 15:24:19 by dso               #+#    #+#             */
-/*   Updated: 2021/11/29 17:18:06 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/01 00:15:30 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,30 @@ int	ft_checkorder(t_stack *stacka)
 		tmp = tmp->prev;
 	}
 	return (0);
+}
+
+void	ft_checkthree(t_stack *stacka, int size)
+{	
+	if (stacka->top->value > stacka->top->prev->value
+	&& stacka->top->value < stacka->bottom->value)
+		ft_sa(stacka, size);
+	else if (stacka->top->value > stacka->top->prev->value
+	&& stacka->top->prev->value > stacka->bottom->value)
+	{
+		ft_sa(stacka, size);
+		write(1, "\n", 1);
+		ft_rra(stacka);
+	}
+	else if(stacka->bottom->value > stacka->bottom->next->value
+	&& stacka->bottom->next->value < stacka->top->value)
+		ft_ra(stacka);
+	else if(stacka->bottom->value > stacka->top->value
+	&& stacka->top->prev->value > stacka->bottom->value)
+	{
+		ft_sa(stacka, size);
+		write(1, "\n", 1);
+		ft_ra(stacka);
+	}
+	else
+		ft_rra(stacka);
 }
