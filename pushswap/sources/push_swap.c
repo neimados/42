@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/12/01 19:25:29 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/02 00:13:21 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,6 @@ int main(int argc, char **argv)
 		write (2, "Error\n", 6);
 		return (-1);
 	}
-	// printf("test : %d\n", stacka->top->value);
-	// printf("test : %d\n", stacka->bottom->value);
-	//ft_sa(stacka);
-	//ft_pb(stacka, stackb);
-	//ft_ss(stacka, stackb);
-	//ft_ra(stacka);
-	// ft_pb(stacka, stackb);
-	// ft_pb(stacka, stackb);
-	// ft_pb(stacka, stackb);
-	// ft_pb(stacka, stackb);
-	// // ft_rr(stacka, stackb);
-	// ft_rrr(stacka, stackb);
 	size = ft_stacklen(stacka);
 	if (ft_checkorder(stacka) == 1)
 	{
@@ -49,6 +37,8 @@ int main(int argc, char **argv)
 			ft_checkthree(stacka, size);
 		else if (size <= 5)
 			ft_checkfive(stacka, stackb, size);
+		else if (size <= 100)
+			ft_checkhundred(stacka, stackb);
 	}
 
 	tmp = stacka->top;

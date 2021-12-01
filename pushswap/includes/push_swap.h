@@ -39,6 +39,7 @@ int		ft_checkorder(t_stack *stacka);
 int		ft_stacklen(t_stack *stack);
 void	ft_checkthree(t_stack *stacka, int size);
 void	ft_checkfive(t_stack *stacka, t_stack *stackb, int size);
+void	ft_checkhundred(t_stack *stacka, t_stack *stackb);
 int		ft_findbig(t_stack *stacka);
 int		ft_findsmall(t_stack *stacka);
 
