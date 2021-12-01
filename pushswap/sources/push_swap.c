@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/12/01 00:17:16 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/01 19:25:29 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,12 @@ int main(int argc, char **argv)
 	size = ft_stacklen(stacka);
 	if (ft_checkorder(stacka) == 1)
 	{
-		if (size == 2)
-		{
-			ft_sa(stacka, size);
-			write(1, "sa", 2);
-		}
-		else if (size == 3)
+		if (size <= 3)
 			ft_checkthree(stacka, size);
+		else if (size <= 5)
+			ft_checkfive(stacka, stackb, size);
 	}
+
 	tmp = stacka->top;
 	// printf("\ntop : %d\n", stacka->top->value);
 	// printf("bottom : %d\n", stacka->bottom->value);

@@ -2,7 +2,8 @@ NAME = push_swap
 
 SRC = ./sources/push_swap.c ./sources/ft_stack.c ./sources/ft_parse.c \
 ./sources/ft_checkargs.c ./sources/ft_swap.c ./sources/ft_push.c \
-./sources/ft_rotate.c ./sources/ft_reverse.c ./sources/ft_sort.c
+./sources/ft_rotate.c ./sources/ft_reverse.c ./sources/ft_sort.c \
+./sources/ft_sort_utils.c
 
 OBJS = ${SRC:.c=.o}
 
