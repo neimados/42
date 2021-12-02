@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 12:09:00 by dso               #+#    #+#             */
-/*   Updated: 2021/12/01 00:07:16 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/02 12:57:53 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	ft_ra(t_stack *stacka)
 	first->prev = NULL;
 	stacka->bottom->prev = first;
 	stacka->bottom = first;
-	write(1, "ra", 2);
+	write(1, "ra\n", 3);
 }
 
 void	ft_rb(t_stack *stackb)
@@ -45,7 +45,7 @@ void	ft_rb(t_stack *stackb)
 	first->prev = NULL;
 	stackb->bottom->prev = first;
 	stackb->bottom = first;
-	write(1, "rb", 2);
+	write(1, "rb\n", 3);
 }
 
 void	ft_rr(t_stack *stacka, t_stack *stackb)

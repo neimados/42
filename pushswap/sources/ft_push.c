@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:13:38 by dso               #+#    #+#             */
-/*   Updated: 2021/12/01 10:38:05 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/02 12:57:15 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_pb(t_stack *stacka, t_stack *stackb)
 		stackb->top = first;
 		stackb->top->prev = second;
 	}
-	write (1, "pb", 2);
+	write (1, "pb\n", 3);
 }
 
 void	ft_pa(t_stack *stacka, t_stack *stackb)
@@ -79,5 +79,5 @@ void	ft_pa(t_stack *stacka, t_stack *stackb)
 		stacka->top = first;
 		stacka->top->prev = second;
 	}
-	write (1, "pa", 2);
+	write (1, "pa\n", 3);
 }

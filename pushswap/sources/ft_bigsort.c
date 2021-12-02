@@ -63,15 +63,9 @@ void	ft_checkhundred(t_stack *stacka, t_stack *stackb)
 				ft_ra(stacka);
 			else
 				ft_rra(stacka);
-			write(1, "\n", 1);
 		}
 		ft_pb(stacka, stackb);
-		write(1, "\n", 1);
 	}
 	while (ft_stacklen(stackb) != 0)
-	{
 		ft_pa(stacka, stackb);
-		if (ft_stacklen(stackb) != 0)
-			write(1, "\n", 1);
-	}
 }
