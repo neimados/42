@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:07 by dso               #+#    #+#             */
-/*   Updated: 2021/12/02 10:12:12 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/02 19:01:58 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ t_node	*ft_initlst(int value)
 	if (!node)
 		return (NULL);
 	node->value = value;
+	node->index = 0;
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);

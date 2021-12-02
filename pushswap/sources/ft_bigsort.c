@@ -1,71 +1,73 @@
 #include "../includes/push_swap.h"
 
-static int	ft_smalltop(t_stack *stacka, int *fromtop)
+
+t_node	*ft_index_small(t_stack *stack)
 {
 	t_node	*tmp;
+	t_node	*smallest;
 	int		min;
-	int		i;
 
-	tmp = stacka->top;
+	tmp = stack->top;
 	min = INT_MAX;
-	i = 0;
 	while (tmp)
 	{
-		if (tmp->value < min)
+		if (tmp->value < min && tmp->index == 0)
 		{
 			min = tmp->value;
-			*fromtop = i;
+			smallest = tmp;
 		}
 		tmp = tmp->prev;
-		i++;
 	}
-	return (min);
+	return (smallest);
 }
 
-void	ft_smallbottom(t_stack *stacka, int *frombottom)
+static int	ft_setindex(t_stack *stacka)
+{
+	int	i;
+	int	length;
+	t_node	*tmp;
+
+	i = 1;
+	length = 0;
+	while (i <= ft_stacklen(stacka))
+	{
+		tmp = ft_index_small(stacka);
+		tmp->index = i;
+		i++;
+	}
+	while (i != 0)
+	{
+		length++;
+		i /= 10;
+	}
+	return (length);
+}
+
+void	ft_checkbig(t_stack *stacka, t_stack *stackb)
 {
 	t_node	*tmp;
-	int		min;
+	int		n;
 	int		i;
 
-	tmp = stacka->bottom;
-	min = INT_MAX;
+	n = ft_setindex(stacka);
 	i = 0;
-	while (tmp)
+	while (i < n)
 	{
-		if (tmp->value < min)
+		tmp = stacka->top;
+		while (tmp)
 		{
-			min = tmp->value;
-			*frombottom = i;
+			if (tmp->index % 2 == 0)
+			{
+				tmp->index /= 10;
+				ft_pb(stacka, stackb);
+			}
+			tmp = tmp->prev;
 		}
-		tmp = tmp->next;
+		if (stackb)
+		{
+			while (ft_stacklen(stackb) != 0)
+				ft_pa(stacka, stackb);
+		}
 		i++;
 	}
-}
-
-void	ft_checkhundred(t_stack *stacka, t_stack *stackb)
-{
-	int	fromtop;
-	int	frombottom;
-	int	min;
-	t_node	*tmp;
-
-	tmp = stackb->top;
-	fromtop = 0;
-	frombottom = 0;
-	while (ft_stacklen(stacka) != 0)
-	{	
-		min = ft_smalltop(stacka, &fromtop);
-		ft_smallbottom(stacka, &frombottom);
-		while (stacka->top->value != min)
-		{
-			if (fromtop <= frombottom)
-				ft_ra(stacka);
-			else
-				ft_rra(stacka);
-		}
-		ft_pb(stacka, stackb);
-	}
-	while (ft_stacklen(stackb) != 0)
-		ft_pa(stacka, stackb);
 }
