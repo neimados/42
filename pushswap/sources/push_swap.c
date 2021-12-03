@@ -6,7 +6,7 @@
 /*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/12/02 23:15:10 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/03 09:48:09 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 {
 	t_stack *stacka;
 	t_stack *stackb;
-	t_node	*tmp;
+	// t_node	*tmp;
 	int 	size;
 
 	if (argc < 2)
@@ -61,20 +61,20 @@ int main(int argc, char **argv)
 			ft_checkbig(stacka, stackb);
 	}
 
-	tmp = stacka->top;
+	// tmp = stacka->top;
 	
-	printf("\n");
-	while (tmp != NULL)
-	{
-		printf("a : %d\n", tmp->value);
-		tmp = tmp->prev;
-	}
-	tmp = stackb->top;
-	while (tmp != NULL)
-	{
-		printf("b : %d\n", tmp->value);
-		tmp = tmp->prev;
-	}
+	// printf("\n");
+	// while (tmp != NULL)
+	// {
+	// 	printf("a : %d\n", tmp->value);
+	// 	tmp = tmp->prev;
+	// }
+	// tmp = stackb->top;
+	// while (tmp != NULL)
+	// {
+	// 	printf("b : %d\n", tmp->value);
+	// 	tmp = tmp->prev;
+	// }
 	ft_free(stacka);
 	ft_free(stackb);
 	return (0);

@@ -1,6 +1,5 @@
 #include "../includes/push_swap.h"
 
-
 t_node	*ft_index_small(t_stack *stack)
 {
 	t_node	*tmp;
@@ -38,7 +37,7 @@ static int	ft_setindex(t_stack *stacka)
 	while (i != 0)
 	{
 		length++;
-		i /= 10;
+		i /= 2;
 	}
 	return (length);
 }
@@ -48,26 +47,34 @@ void	ft_checkbig(t_stack *stacka, t_stack *stackb)
 	t_node	*tmp;
 	int		n;
 	int		i;
+	int		j;
+	int		size;
 
 	n = ft_setindex(stacka);
 	i = 0;
+	j = 0;
+	size = 0;
+	tmp = stacka->top;
 	while (i < n)
 	{
-		tmp = stacka->top;
-		while (tmp)
+		size = ft_stacklen(stacka);
+		while (j < size)
 		{
-			if (tmp->index % 2 == 0)
+			if (stacka->top->index % 2 == 0)
 			{
-				tmp->index /= 10;
+				stacka->top->index /= 2;
 				ft_pb(stacka, stackb);
 			}
-			tmp = tmp->prev;
+			else
+			{
+				stacka->top->index /= 2;
+				ft_ra(stacka);
+			}
+			j++;
 		}
-		if (stackb)
-		{
-			while (ft_stacklen(stackb) != 0)
-				ft_pa(stacka, stackb);
-		}
+		while (ft_stacklen(stackb) != 0)
+			ft_pa(stacka, stackb);
 		i++;
+		j = 0;
 	}
 }
