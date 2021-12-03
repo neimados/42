@@ -1,44 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_checkargs.c                                     :+:      :+:    :+:   */
+/*   ft_parse_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/29 10:32:06 by dso               #+#    #+#             */
-/*   Updated: 2021/12/03 12:03:32 by dso              ###   ########.fr       */
+/*   Created: 2021/12/03 13:14:40 by dso               #+#    #+#             */
+/*   Updated: 2021/12/03 14:16:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 
-int	ft_checkargs(long nb, t_stack *stack)
+int	ft_checkfail(int minus, t_stack *stack, long nb)
 {
-	t_node	*tmp;
-
-	if (nb > INT_MAX || nb < INT_MIN)
+	if (minus > 1)
 		return (1);
-	tmp = stack->bottom;
-	while (tmp != NULL)
+	if (ft_checkargs(nb, stack) == 1)
+		return (1);
+	if (!ft_push_bottom(stack, nb))
 	{
-		if (tmp->value == nb)
-			return (1);
-		tmp = tmp->next;
+		ft_free(stack);
+		return (1);
 	}
 	return (0);
-}
-
-int	ft_stacklen(t_stack *stack)
-{
-	int		count;
-	t_node	*tmp;
-
-	count = 0;
-	tmp = stack->top;
-	while (tmp)
-	{
-		count++;
-		tmp = tmp->prev;
-	}
-	return (count);
 }

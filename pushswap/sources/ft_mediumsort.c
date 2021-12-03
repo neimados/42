@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_mediumsort.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/12/03 12:11:36 by dso               #+#    #+#             */
+/*   Updated: 2021/12/03 12:35:15 by dso              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/push_swap.h"
 
 static int	ft_smalltop(t_stack *stacka, int *fromtop)
@@ -45,9 +57,9 @@ void	ft_smallbottom(t_stack *stacka, int *frombottom)
 
 void	ft_checkmedium(t_stack *stacka, t_stack *stackb)
 {
-	int	fromtop;
-	int	frombottom;
-	int	min;
+	int		fromtop;
+	int		frombottom;
+	int		min;
 	t_node	*tmp;
 
 	tmp = stackb->top;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_stack.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/29 10:31:07 by dso               #+#    #+#             */
-/*   Updated: 2021/12/02 19:01:58 by damien           ###   ########.fr       */
+/*   Created: 2021/12/03 12:10:08 by dso               #+#    #+#             */
+/*   Updated: 2021/12/03 12:11:59 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 t_node	*ft_initlst(int value)
 {
-	t_node *node;
-	
+	t_node	*node;
+
 	node = malloc(sizeof(t_node));
 	if (!node)
 		return (NULL);
@@ -28,7 +28,7 @@ t_node	*ft_initlst(int value)
 
 t_stack	*ft_initstack(void)
 {
-	t_stack *stack;
+	t_stack	*stack;
 
 	stack = malloc(sizeof(t_stack));
 	if (!stack)
@@ -40,7 +40,7 @@ t_stack	*ft_initstack(void)
 
 t_node	*ft_push_bottom(t_stack *stack, int value)
 {
-	t_node *node;
+	t_node	*node;
 
 	node = ft_initlst(value);
 	if (!node)

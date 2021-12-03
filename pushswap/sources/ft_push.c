@@ -3,20 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_push.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 11:13:38 by dso               #+#    #+#             */
-/*   Updated: 2021/12/02 12:57:15 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/03 12:28:34 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
 
+static void	ft_p(t_stack *stack, t_node *first, t_node *second)
+{
+	if (stack->top == NULL)
+	{
+		stack->top = first;
+		stack->bottom = first;
+		stack->top->prev = NULL;
+	}
+	else
+	{
+		second = stack->top;
+		second->next = first;
+		stack->top = first;
+		stack->top->prev = second;
+	}
+}
+
 void	ft_pb(t_stack *stacka, t_stack *stackb)
 {
 	t_node	*first;
-	t_node *second;
-	
+	t_node	*second;
+
+	second = NULL;
 	if (stacka->top == NULL)
 		return ;
 	first = stacka->top;
@@ -31,27 +49,16 @@ void	ft_pb(t_stack *stacka, t_stack *stackb)
 		stacka->top = NULL;
 		stacka->bottom = NULL;
 	}
-	if(stackb->top == NULL)
-	{
-		stackb->top = first;
-		stackb->bottom = first;
-		stackb->top->prev = NULL;
-	}
-	else
-	{
-		second = stackb->top;
-		second->next = first;
-		stackb->top = first;
-		stackb->top->prev = second;
-	}
+	ft_p(stackb, first, second);
 	write (1, "pb\n", 3);
 }
 
 void	ft_pa(t_stack *stacka, t_stack *stackb)
 {
 	t_node	*first;
-	t_node *second;
-	
+	t_node	*second;
+
+	second = NULL;
 	if (stackb->top == NULL)
 		return ;
 	first = stackb->top;
@@ -66,18 +73,6 @@ void	ft_pa(t_stack *stacka, t_stack *stackb)
 		stackb->top = NULL;
 		stackb->bottom = NULL;
 	}
-	if(stacka->top == NULL)
-	{
-		stacka->top = first;
-		stacka->bottom = first;
-		stacka->top->prev = NULL;
-	}
-	else
-	{
-		second = stacka->top;
-		second->next = first;
-		stacka->top = first;
-		stacka->top->prev = second;
-	}
+	ft_p(stacka, first, second);
 	write (1, "pa\n", 3);
 }
