@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 17:02:01 by dso               #+#    #+#             */
-/*   Updated: 2021/12/04 17:29:39 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/04 23:29:46 by damien           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,7 @@ void	ft_rrr2(t_stack *stacka, t_stack *stackb);
 int		ft_checktask(char *str, t_stack *jobs);
 void	dotask(t_stack *jobs, t_stack *stacka, t_stack *stackb);
 int		ft_checkfirst(int argc, t_stack *stacka, t_stack *stackb, char **argv);
+int		ft_checktask(char *str, t_stack *jobs);
+int		ft_checktask2(char *str, t_stack *jobs);
 
 #endif
