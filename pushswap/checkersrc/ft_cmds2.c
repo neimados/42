@@ -1,35 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_push.c                                          :+:      :+:    :+:   */
+/*   ft_cmds2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/29 11:13:38 by dso               #+#    #+#             */
-/*   Updated: 2021/12/04 12:45:56 by dso              ###   ########.fr       */
+/*   Created: 2021/12/04 17:21:25 by dso               #+#    #+#             */
+/*   Updated: 2021/12/04 17:37:30 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/push_swap.h"
+#include "../includes/checker.h"
 
-void	ft_p(t_stack *stack, t_node *first, t_node *second)
-{
-	if (stack->top == NULL)
-	{
-		stack->top = first;
-		stack->bottom = first;
-		stack->top->prev = NULL;
-	}
-	else
-	{
-		second = stack->top;
-		second->next = first;
-		stack->top = first;
-		stack->top->prev = second;
-	}
-}
-
-void	ft_pb(t_stack *stacka, t_stack *stackb)
+void	ft_pb2(t_stack *stacka, t_stack *stackb)
 {
 	t_node	*first;
 	t_node	*second;
@@ -50,10 +33,9 @@ void	ft_pb(t_stack *stacka, t_stack *stackb)
 		stacka->bottom = NULL;
 	}
 	ft_p(stackb, first, second);
-	write (1, "pb\n", 3);
 }
 
-void	ft_pa(t_stack *stacka, t_stack *stackb)
+void	ft_pa2(t_stack *stacka, t_stack *stackb)
 {
 	t_node	*first;
 	t_node	*second;
@@ -74,5 +56,27 @@ void	ft_pa(t_stack *stacka, t_stack *stackb)
 		stackb->bottom = NULL;
 	}
 	ft_p(stacka, first, second);
-	write (1, "pa\n", 3);
+}
+
+void	ft_rr2(t_stack *stacka, t_stack *stackb)
+{
+	ft_ra2(stacka);
+	ft_rb2(stackb);
+}
+
+void	ft_rra2(t_stack *stacka)
+{
+	t_node	*first;
+	t_node	*second;
+
+	if (stacka->top->prev == NULL)
+		return ;
+	first = stacka->bottom;
+	second = stacka->bottom->next;
+	second->prev = NULL;
+	stacka->bottom = second;
+	first->prev = stacka->top;
+	first->next = NULL;
+	stacka->top->next = first;
+	stacka->top = first;
 }

@@ -6,27 +6,12 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/29 10:31:26 by dso               #+#    #+#             */
-/*   Updated: 2021/12/03 12:42:46 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/04 17:17:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
-
-void	ft_free(t_stack *stack)
-{
-	t_node	*tmp;
-
-	if (!stack)
-		return ;
-	tmp = stack->top;
-	while (stack->top != NULL)
-	{
-		tmp = tmp->prev;
-		free(stack->top);
-		stack->top = tmp;
-	}
-	free(stack);
-}
+#include <stdio.h>
 
 void	ft_push_swap(t_stack *stacka, t_stack *stackb)
 {

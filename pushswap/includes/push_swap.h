@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 11:59:06 by dso               #+#    #+#             */
-/*   Updated: 2021/12/03 16:00:50 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/04 17:16:26 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ t_stack	*ft_initstack(void);
 t_node	*ft_push_bottom(t_stack *stack, int value);
 int		ft_parse(int argc, char **argv, t_stack *stack);
 int		ft_checkargs(long nb, t_stack *stack);
+int		ft_onearg2(t_stack *stack, long *nb, int *minus);
+void	ft_nbr(long *nb, char c);
+int		ft_checkone(char c);
 void	ft_sa(t_stack *stacka, int size);
 void	ft_sb(t_stack *stackb, int size);
 void	ft_ss(t_stack *stacka, t_stack *stackb, int size);
@@ -57,5 +60,6 @@ int		ft_findsmall(t_stack *stacka);
 void	ft_free(t_stack *stack);
 int		ft_checkfail(int minus, t_stack *stack, long nb);
 void	ft_push_swap(t_stack *stacka, t_stack *stackb);
+void	ft_p(t_stack *stack, t_node *first, t_node *second);
 
 #endif
