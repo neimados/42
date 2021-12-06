@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checker_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damien <damien@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 11:02:15 by dso               #+#    #+#             */
-/*   Updated: 2021/12/05 09:21:35 by damien           ###   ########.fr       */
+/*   Updated: 2021/12/06 10:17:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,22 @@ int	ft_checktask2(char *str, t_stack *jobs)
 	return (0);
 }
 
+static void	dotask2(t_node *tmp, t_stack *stacka, t_stack *stackb)
+{
+	if (tmp->value == 6)
+		ft_ra2(stacka);
+	else if (tmp->value == 7)
+		ft_rb2(stackb);
+	else if (tmp->value == 8)
+		ft_rr2(stacka, stackb);
+	else if (tmp->value == 9)
+		ft_rra2(stacka);
+	else if (tmp->value == 10)
+		ft_rrb2(stackb);
+	else if (tmp->value == 11)
+		ft_rrr2(stacka, stackb);
+}
+
 void	dotask(t_stack *jobs, t_stack *stacka, t_stack *stackb)
 {
 	t_node	*tmp;
@@ -69,18 +85,8 @@ void	dotask(t_stack *jobs, t_stack *stacka, t_stack *stackb)
 			ft_pa2(stacka, stackb);
 		else if (tmp->value == 5)
 			ft_pb2(stacka, stackb);
-		else if (tmp->value == 6)
-			ft_ra2(stacka);
-		else if (tmp->value == 7)
-			ft_rb2(stackb);
-		else if (tmp->value == 8)
-			ft_rr2(stacka, stackb);
-		else if (tmp->value == 9)
-			ft_rra2(stacka);
-		else if (tmp->value == 10)
-			ft_rrb2(stackb);
-		else if (tmp->value == 11)
-			ft_rrr2(stacka, stackb);
+		else
+			dotask2(tmp, stacka, stackb);
 		tmp = tmp->prev;
 	}
 }
