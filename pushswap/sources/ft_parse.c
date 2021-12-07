@@ -11,34 +11,34 @@
 /* ************************************************************************** */
 
 #include "../includes/push_swap.h"
-#include <stdio.h>
 
-static int	ft_onearg(char **argv, t_stack *stack, int j)
+static int	ft_onearg(char **argv, t_stack *stack)
 {
-	long	nb;
-	int		minus;
+	int		i;
+	char	**str;
 
-	nb = 0;
-	minus = 0;
-	while (argv[1][j])
-	{
-		if (ft_checkone(argv[1][j]) == 1)
-			return (1);
-		else if (argv[1][j] == '-')
-			minus += 1;
-		else if (argv[1][j] == ' ')
-		{
-			if (ft_onearg2(stack, &nb, &minus) == 1)
-				return (1);
-		}
-		else
-			ft_nbr(&nb, argv[1][j]);
-		j++;
-	}
-	if (minus == 1)
-		nb = -nb;
-	if (ft_checkfail(minus, stack, nb) == 1)
+	i = 0;
+	if (ft_checkone(argv[1]) == 1)
+ 		return (1);
+	str = ft_split(argv[1], ' ');
+	if (!str)
 		return (1);
+	while (str[i])
+	{
+		if (ft_checkargs(ft_atoi(str[i]), stack) == 1)
+		{
+			freemalloc(str);
+			return (1);
+		}
+		if (!ft_push_bottom(stack, ft_atoi(str[i])))
+		{
+			ft_free(stack);
+			freemalloc(str);
+			return (1);
+		}
+		i++;
+	}
+	freemalloc(str);
 	return (0);
 }
 
@@ -97,7 +97,7 @@ int	ft_parse(int argc, char **argv, t_stack *stack)
 	j = 0;
 	if (argc == 2)
 	{
-		if (ft_onearg(argv, stack, j) == 1)
+		if (ft_onearg(argv, stack) == 1)
 			return (1);
 	}
 	else

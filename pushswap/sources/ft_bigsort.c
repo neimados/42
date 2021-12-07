@@ -59,7 +59,7 @@ void	ft_radix(t_stack *stacka, t_stack *stackb, int size)
 	int	j;
 
 	j = 0;
-	while (j < size)
+	while (j < size && ft_checkorder(stacka) == 1)
 	{
 		if (stacka->top->index % 2 == 0)
 		{

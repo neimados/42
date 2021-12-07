@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-static void	freemalloc(char **strs)
+void	freemalloc(char **strs)
 {
 	int	i;
 
