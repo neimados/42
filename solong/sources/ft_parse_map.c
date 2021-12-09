@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long.c                                          :+:      :+:    :+:   */
+/*   ft_parse_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,56 +12,53 @@
 
 #include "../includes/so_long.h"
 
-int	ft_freeall(t_map *map, t_struct *game)
+t_map	*ft_initmap(void)
 {
-	int	i;
+	t_map	*new;
 
-	i = 0;
-	if (map->map[0])
-	{
-		while (map->map[i])
-		{
-			free(map->map[i]);
-			i++;
-		}
-		free(map->map);
-	}
-	free(map);
-	free(game);
-	return (1);
+	new = malloc(sizeof(t_map));
+	if (!new)
+		return (NULL);
+	new->width = 0;
+	new->height = 0;
+	new->col = 0;
+	new->exit = 0;
+	new->player = 0;
+	return (new);
 }
 
-int	main(int argc, char **argv)
+int	ft_parse_map(char *filename, t_map *map)
 {
-	t_struct	*game;
-	t_map		*map;
-	int i;
+	int		fd;
+	char	*str;
+	int		i;
 
 	i = 0;
-	if (argc != 2)
+	map->map = malloc(sizeof(char *) * (map->height + 1));
+	if (!map->map)
+		return (1);
+	map->map[map->height] = 0;
+	fd = open(filename, O_RDONLY);
+	if (fd <= 0)
 	{
-		write(2, "Error\nInvalid argument", 22);
-		exit(0);
+		write(2, "Error\nInvalid map", 17);
+		return (1);
 	}
-	game = malloc(sizeof(t_struct));
-	map = ft_initmap();
-	if (!map || !game)
-		exit(0);
-	if (ft_check_map(argv[1], map) == 1)
+	str = get_next_line(fd);
+	while (str != NULL)
 	{
-		free(map);
-		free(game);
-		exit(0);
-	}
-	if (ft_parse_map(argv[1], map) == 1)
-	{
-		ft_freeall(map, game);
-		exit(0);
-	}
-	while (map->map[i])
-	{
-		printf("%s\n", map->map[i]);
+		map->map[i] = malloc(sizeof(char) * (map->width + 1));
+		if (!map->map[i])
+		{
+			free(str);
+			close(fd);
+			return (1);
+		}
+		map->map[i] = ft_strdup(str);
 		i++;
+		free(str);
+		str = get_next_line(fd);
 	}
+	close(fd);
 	return (0);
 }
