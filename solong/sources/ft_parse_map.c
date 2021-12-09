@@ -27,6 +27,50 @@ t_map	*ft_initmap(void)
 	return (new);
 }
 
+int ft_check_map_items(t_map *map)
+{
+	if (map->col < 1 || map->exit < 1 || map->player != 1)
+		return (1);
+	return (0);
+}
+
+int	ft_parse_check(t_map *map)
+{
+	unsigned long	i;
+	unsigned long	j;
+
+	i = 0;
+	j = 0;
+	while (map->map[i])
+	{
+		if (map->map[i][0] != '1' || map->map[i][map->width -1] != '1')
+				return (1);
+		while (map->map[i][j])
+		{
+			if (i == 0 || i == map->height - 1)
+			{
+				if (map->map[i][j] != '1')
+					return (1);
+			}
+			else
+			{
+				if (map->map[i][j] == 'E')
+					map->exit = map->exit + 1;
+				else if (map->map[i][j] == 'C')
+					map->col = map->col + 1;
+				else if (map->map[i][j] == 'P')
+					map->player = map->player + 1;
+			}
+			j++;
+		}
+		i++;
+		j = 0;
+	}
+	if (ft_check_map_items(map) == 1)
+		return (1);
+	return (0);
+}
+
 int	ft_parse_map(char *filename, t_map *map)
 {
 	int		fd;
@@ -60,5 +104,7 @@ int	ft_parse_map(char *filename, t_map *map)
 		str = get_next_line(fd);
 	}
 	close(fd);
+	if (ft_parse_check(map) == 1)
+		return (1);
 	return (0);
 }

@@ -28,6 +28,7 @@ int	ft_freeall(t_map *map, t_struct *game)
 	}
 	free(map);
 	free(game);
+	write(2, "Error\nInvalid map", 17);
 	return (1);
 }
 
@@ -35,9 +36,9 @@ int	main(int argc, char **argv)
 {
 	t_struct	*game;
 	t_map		*map;
-	int i;
+	// int i;
 
-	i = 0;
+	// i = 0;
 	if (argc != 2)
 	{
 		write(2, "Error\nInvalid argument", 22);
@@ -58,10 +59,10 @@ int	main(int argc, char **argv)
 		ft_freeall(map, game);
 		exit(0);
 	}
-	while (map->map[i])
-	{
-		printf("%s\n", map->map[i]);
-		i++;
-	}
+	// while (map->map[i])
+	// {
+	// 	printf("%s\n", map->map[i]);
+	// 	i++;
+	// }
 	return (0);
 }

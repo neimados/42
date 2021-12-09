@@ -27,31 +27,6 @@ int	ft_check_map_ext(char *filename)
 	}
 	return (0);
 }
-// int ft_check_map_items(char **map)
-// {
-	
-// }
-
-// int	ft_check_map_wall(char *str, int line)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	if (line == 1)
-// 	{
-// 		while (str[i])
-// 		{
-// 			if (str[i] != '1')
-// 				return (1);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if (str[0] != '1' || str[ft_strlen(line) - 1] != '1')
-// 			return (1);
-// 	}
-// 	return (0);
-// }
 
 int	ft_check_map_size(int fd, t_map *map)
 {
