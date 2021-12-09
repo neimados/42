@@ -18,12 +18,12 @@ char	*ft_read(int fd, char *carry)
 	char	*tmp;
 
 	i = 1;
-	if (carry != NULL && ft_strchr(carry, '\n') != NULL)
+	if (carry != NULL && ft_strchr2(carry, '\n') != NULL)
 		return (carry);
 	tmp = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp)
 		return (NULL);
-	while (ft_strchr(carry, '\n') == NULL && i != 0)
+	while (ft_strchr2(carry, '\n') == NULL && i != 0)
 	{
 		i = read(fd, tmp, BUFFER_SIZE);
 		if (i == -1)

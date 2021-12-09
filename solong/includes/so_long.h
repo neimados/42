@@ -14,6 +14,11 @@
 #define SO_LONG_H
 
 # define BUFFER_SIZE 10
+# define GROUND "./sprites/ground.xpm"
+# define WALL "./sprites/wall.xpm"
+# define COL "./sprites/ball.xpm"
+# define EXIT "./sprites/exit.xpm"
+# define PLAYER "./sprites/pikachu.xpm"
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -36,10 +41,22 @@ typedef struct s_map
 	int		col;
 	int		exit;
 	int		player;
-}			t_map;		
+}			t_map;
+
+typedef struct s_img
+{
+	void	*wall;
+	void	*ground;
+	void	*col;
+	void	*exit;
+	void	*player;
+	int		width;
+	int		height;
+}			t_img;
 
 char	*get_next_line(int fd);
 char	*ft_read(int fd, char *buffer);
+char	*ft_strchr2(const char *str, int c);
 char	*ft_findnl(char *buffer);
 char	*ft_carry(char *buffer);
 char	*ft_strjoin2(char *s1, char *s2);
