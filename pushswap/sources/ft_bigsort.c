@@ -77,7 +77,6 @@ void	ft_radix(t_stack *stacka, t_stack *stackb, int size)
 
 void	ft_checkbig(t_stack *stacka, t_stack *stackb)
 {
-	t_node	*tmp;
 	int		n;
 	int		i;
 	int		size;
@@ -85,7 +84,6 @@ void	ft_checkbig(t_stack *stacka, t_stack *stackb)
 	n = ft_setindex(stacka);
 	i = 0;
 	size = 0;
-	tmp = stacka->top;
 	while (i < n)
 	{
 		size = ft_stacklen(stacka);
