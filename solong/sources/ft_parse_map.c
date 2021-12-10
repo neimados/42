@@ -12,76 +12,65 @@
 
 #include "../includes/so_long.h"
 
-t_map	*ft_initmap(void)
+int ft_check_map_items(t_struct *game)
 {
-	t_map	*new;
-
-	new = malloc(sizeof(t_map));
-	if (!new)
-		return (NULL);
-	new->width = 0;
-	new->height = 0;
-	new->col = 0;
-	new->exit = 0;
-	new->player = 0;
-	return (new);
-}
-
-int ft_check_map_items(t_map *map)
-{
-	if (map->col < 1 || map->exit < 1 || map->player != 1)
+	if (game->map->col < 1 || game->map->exit < 1 || game->map->player != 1)
 		return (1);
 	return (0);
 }
 
-int	ft_parse_check(t_map *map)
+int	ft_parse_check(t_struct *game)
 {
 	unsigned long	i;
 	unsigned long	j;
 
 	i = 0;
 	j = 0;
-	while (map->map[i])
+	while (game->map->map[i])
 	{
-		if (map->map[i][0] != '1' || map->map[i][map->width -1] != '1')
+		if (game->map->map[i][0] != '1' || game->map->map[i][game->map->width -1] != '1')
 				return (1);
-		while (map->map[i][j])
+		while (game->map->map[i][j])
 		{
-			if (i == 0 || i == map->height - 1)
+			if (i == 0 || i == game->map->height - 1)
 			{
-				if (map->map[i][j] != '1')
+				if (game->map->map[i][j] != '1')
 					return (1);
 			}
 			else
 			{
-				if (map->map[i][j] == 'E')
-					map->exit = map->exit + 1;
-				else if (map->map[i][j] == 'C')
-					map->col = map->col + 1;
-				else if (map->map[i][j] == 'P')
-					map->player = map->player + 1;
+				if (game->map->map[i][j] == 'E')
+					game->map->exit = game->map->exit + 1;
+				else if (game->map->map[i][j] == 'C')
+					game->map->col = game->map->col + 1;
+				else if (game->map->map[i][j] == 'P')
+				{
+					game->map->player = game->map->player + 1;
+					game->player->x = j;
+					game->player->y = i;
+				}
 			}
 			j++;
 		}
 		i++;
 		j = 0;
 	}
-	if (ft_check_map_items(map) == 1)
+	if (ft_check_map_items(game) == 1)
 		return (1);
 	return (0);
 }
 
-int	ft_parse_map(char *filename, t_map *map)
+int	ft_parse_map(char *filename, t_struct *game)
 {
 	int		fd;
 	char	*str;
 	int		i;
 
 	i = 0;
-	map->map = malloc(sizeof(char *) * (map->height + 1));
-	if (!map->map)
+	game->map->map = malloc(sizeof(char *) * (game->map->height + 1));
+	if (!game->map->map)
 		return (1);
-	map->map[map->height] = 0;
+	game->map->map[game->map->height] = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd <= 0)
 	{
@@ -91,20 +80,20 @@ int	ft_parse_map(char *filename, t_map *map)
 	str = get_next_line(fd);
 	while (str != NULL)
 	{
-		map->map[i] = malloc(sizeof(char) * (map->width + 1));
-		if (!map->map[i])
+		game->map->map[i] = malloc(sizeof(char) * (game->map->width + 1));
+		if (!game->map->map[i])
 		{
 			free(str);
 			close(fd);
 			return (1);
 		}
-		map->map[i] = ft_strdup(str);
+		game->map->map[i] = ft_strdup(str);
 		i++;
 		free(str);
 		str = get_next_line(fd);
 	}
 	close(fd);
-	if (ft_parse_check(map) == 1)
+	if (ft_parse_check(game) == 1)
 		return (1);
 	return (0);
 }

@@ -28,26 +28,26 @@ int	ft_check_map_ext(char *filename)
 	return (0);
 }
 
-int	ft_check_map_size(int fd, t_map *map)
+int	ft_check_map_size(int fd, t_struct *game)
 {
 	char *str;
 
 	str = get_next_line(fd);
-	map->width = ft_strlen(str);
+	game->map->width = ft_strlen(str);
 	while (str)
 	{
-		map->height = map->height + 1;
-		if (ft_strlen(str) != map->width)
+		game->map->height = game->map->height + 1;
+		if (ft_strlen(str) != game->map->width)
 			return (1);
 		free(str);
 		str = get_next_line(fd);
 	}
-	if (map->height == map->width)
+	if (game->map->height == game->map->width)
 		return (1);
 	return (0);
 }
 
-int	ft_check_map(char *filename, t_map *map)
+int	ft_check_map(char *filename, t_struct *game)
 {
 	int	fd;
 	
@@ -59,7 +59,7 @@ int	ft_check_map(char *filename, t_map *map)
 		write(2, "Error\nInvalid map file", 22);
 		return (1);
 	}
-	if (ft_check_map_size(fd, map) == 1)
+	if (ft_check_map_size(fd, game) == 1)
 	{
 		write(2, "Error\nInvalid map", 17);
 		close(fd);

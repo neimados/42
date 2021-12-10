@@ -28,12 +28,6 @@
 # include "../minilibx/mlx.h"
 # include <stdio.h>
 
-typedef struct s_struct
-{
-	void	*mlx;
-	void	*win;
-}			t_struct;
-
 typedef struct s_map
 {
 	char	**map;
@@ -55,6 +49,22 @@ typedef struct s_img
 	int		height;
 }			t_img;
 
+typedef struct s_player
+{
+	int	x;
+	int	y;
+	int	moves;
+}			t_player;
+
+typedef struct s_struct
+{
+	void	*mlx;
+	void	*win;
+	t_map		*map;
+	t_img		*img;
+	t_player	*player;
+}			t_struct;
+
 char	*get_next_line(int fd);
 char	*ft_read(int fd, char *buffer);
 char	*ft_strchr2(const char *str, int c);
@@ -62,10 +72,11 @@ char	*ft_findnl(char *buffer);
 char	*ft_carry(char *buffer);
 char	*ft_strjoin2(char *s1, char *s2);
 t_map	*ft_initmap(void);
-int		ft_check_map(char *filename, t_map *map);
-int		ft_parse_map(char *filename, t_map *map);
-int		ft_print_img(t_map *map, t_struct *game, t_img *img);
-int		ft_loadimg(t_img *img, t_struct *game);
-int		ft_freeall(t_map *map, t_struct *game);
+int		ft_check_map(char *filename, t_struct *game);
+int		ft_parse_map(char *filename, t_struct *game);
+int		ft_print_img(t_struct *game);
+int		ft_loadimg(t_struct *game);
+int		ft_freeall(t_struct *game);
+void	ft_move(t_struct *game, int x, int y);
 
 #endif
