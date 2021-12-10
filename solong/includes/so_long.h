@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 18:15:20 by dso               #+#    #+#             */
-/*   Updated: 2021/12/06 18:16:04 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/10 13:14:00 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 #define SO_LONG_H
 
 # define BUFFER_SIZE 10
+# define SPRITE_SIZE 64
 # define GROUND "./sprites/ground.xpm"
 # define WALL "./sprites/wall.xpm"
 # define COL "./sprites/ball.xpm"
 # define EXIT "./sprites/exit.xpm"
-# define PLAYER "./sprites/pikachu.xpm"
+# define PLAYER "./sprites/player_S00.xpm"
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -63,5 +64,8 @@ char	*ft_strjoin2(char *s1, char *s2);
 t_map	*ft_initmap(void);
 int		ft_check_map(char *filename, t_map *map);
 int		ft_parse_map(char *filename, t_map *map);
+int		ft_print_img(t_map *map, t_struct *game, t_img *img);
+int		ft_loadimg(t_img *img, t_struct *game);
+int		ft_freeall(t_map *map, t_struct *game);
 
 #endif
