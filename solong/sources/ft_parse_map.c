@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:06:03 by dso               #+#    #+#             */
-/*   Updated: 2021/12/07 15:40:11 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/11 17:18:01 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	ft_parse_check(t_struct *game)
 				else if (game->map->map[i][j] == 'P')
 				{
 					game->map->player = game->map->player + 1;
-					game->player->x = j;
-					game->player->y = i;
+					game->player->x = i;
+					game->player->y = j;
 				}
 			}
 			j++;

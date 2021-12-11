@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:06:03 by dso               #+#    #+#             */
-/*   Updated: 2021/12/07 15:40:11 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/11 17:07:39 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,28 @@
 
 void	ft_move(t_struct *game, int x, int y)
 {
-	game->player->moves = game->player->moves + 1;
-	game->map->map[x][y] = 'P';
-	game->map->map[game->player->x][game->player->y] = '0';
-	if (ft_print_img(game) == 1)
+	if (game->map->map[x][y] != '1')
 	{
-		write (1, "Error\nMap printing failed", 25);
-		exit(0);
+		if (game->map->map[x][y] == 'C')
+			game->map->col = game->map->col - 1;
+		else if (game->map->map[x][y] == 'E' && game->map->col != 0)
+			return ;
+		if (game->map->map[x][y] == 'E' && game->map->col == 0)
+		{
+			game->gameover = 1;
+			game->map->map[game->player->x][game->player->y] = '0';
+		}
+		else
+			game->map->map[x][y] = 'P';
+		game->player->moves = game->player->moves + 1;
+		
+		game->map->map[game->player->x][game->player->y] = '0';
+		if (ft_print_img(game) == 1)
+		{
+			write (1, "Error\nMap printing failed", 25);
+			exit(0);
+		}
+		game->player->x = x;
+		game->player->y = y;
 	}
-	game->player->x = x;
-	game->player->y = y;
 }

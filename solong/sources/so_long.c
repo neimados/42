@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:06:03 by dso               #+#    #+#             */
-/*   Updated: 2021/12/10 15:43:32 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/11 17:15:29 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,26 @@ int	key_hook(int keycode, t_struct *game)
 		mlx_destroy_window(game->mlx, game->win);
 		exit(0);
 	}
-	else if (keycode == 1)
+	else if (keycode == 1 && game->gameover == 0)
+	{
+		game->player->direction = 0;
 		ft_move(game, game->player->x + 1, game->player->y);
-	else if (keycode == 13)
+	}
+	else if (keycode == 13 && game->gameover == 0)
+	{
+		game->player->direction = 1;
 		ft_move(game, game->player->x - 1, game->player->y);
-	else if (keycode == 2)
+	}
+	else if (keycode == 2 && game->gameover == 0)
+	{
+		game->player->direction = 2;
 		ft_move(game, game->player->x, game->player->y + 1);
-	else if (keycode == 0)
+	}
+	else if (keycode == 0 && game->gameover == 0)
+	{
+		game->player->direction = 3;
 		ft_move(game, game->player->x, game->player->y - 1);
-	printf("%d\n", keycode);
+	}
 	return (0);
 }
 
@@ -46,6 +57,8 @@ t_struct *ft_init_struct()
 	new->map = ft_initmap();
 	new->player = malloc(sizeof(t_player));
 	new->player->moves = 0;
+	new->player->direction = 0;
+	new->gameover = 0;
 	return (new);
 }
 
@@ -97,13 +110,13 @@ int	main(int argc, char **argv)
 		write (1, "Error\nMap printing failed", 25);
 		exit(0);
 	}
-	//printf("%d %d\n", game->player->x, game->player->y);
+	//printf("x : %d, y : %d", game->player->x, game->player->y);
 	mlx_key_hook(game->win, key_hook, game);
 	mlx_hook(game->win, 17, 1L<<17, ft_close, game);
 	mlx_loop(game->mlx);
-	// while (map->map[i]) // PRINT MAP
+	// while (game->map->map[i]) // PRINT MAP
 	// {
-	// 	printf("%s\n", map->map[i]);
+	// 	printf("%s\n", game->map->map[i]);
 	// 	i++;
 	// }
 	return (0);

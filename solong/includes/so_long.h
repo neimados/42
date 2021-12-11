@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 18:15:20 by dso               #+#    #+#             */
-/*   Updated: 2021/12/10 13:14:00 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/11 17:07:54 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@
 # define WALL "./sprites/wall.xpm"
 # define COL "./sprites/ball.xpm"
 # define EXIT "./sprites/exit.xpm"
-# define PLAYER "./sprites/player_S00.xpm"
+# define PLAYER0 "./sprites/player_S00.xpm"
+# define PLAYER1 "./sprites/player_N00.xpm"
+# define PLAYER2 "./sprites/player_E00.xpm"
+# define PLAYER3 "./sprites/player_W00.xpm"
 
 # include <stdlib.h>
 # include <fcntl.h>
@@ -44,7 +47,7 @@ typedef struct s_img
 	void	*ground;
 	void	*col;
 	void	*exit;
-	void	*player;
+	void	*player[4];
 	int		width;
 	int		height;
 }			t_img;
@@ -53,13 +56,15 @@ typedef struct s_player
 {
 	int	x;
 	int	y;
+	int	direction;
 	int	moves;
 }			t_player;
 
 typedef struct s_struct
 {
-	void	*mlx;
-	void	*win;
+	void		*mlx;
+	void		*win;
+	int			gameover;
 	t_map		*map;
 	t_img		*img;
 	t_player	*player;

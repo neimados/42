@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 10:50:24 by dso               #+#    #+#             */
-/*   Updated: 2021/12/10 13:18:49 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/11 17:16:55 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ int	ft_loadimg(t_struct *game)
 	game->img->ground = mlx_xpm_file_to_image(game->mlx, GROUND, &game->img->width, &game->img->height);
 	game->img->col = mlx_xpm_file_to_image(game->mlx, COL, &game->img->width, &game->img->height);
 	game->img->exit = mlx_xpm_file_to_image(game->mlx, EXIT, &game->img->width, &game->img->height);
-	game->img->player = mlx_xpm_file_to_image(game->mlx, PLAYER, &game->img->width, &game->img->height);
+	game->img->player[0] = mlx_xpm_file_to_image(game->mlx, PLAYER0, &game->img->width, &game->img->height);
+	game->img->player[1] = mlx_xpm_file_to_image(game->mlx, PLAYER1, &game->img->width, &game->img->height);
+	game->img->player[2] = mlx_xpm_file_to_image(game->mlx, PLAYER2, &game->img->width, &game->img->height);
+	game->img->player[3] = mlx_xpm_file_to_image(game->mlx, PLAYER3, &game->img->width, &game->img->height);
 	if (game->img->wall == NULL || game->img->ground == NULL
 	|| game->img->col == NULL || game->img->exit == NULL)
 		return (1);
@@ -50,7 +53,7 @@ int	ft_print_img(t_struct *game)
 			else if (game->map->map[x][y] == 'P')
 			{
 				mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
-				mlx_put_image_to_window (game->mlx, game->win, game->img->player, SPRITE_SIZE * y, SPRITE_SIZE * x - 64);
+				mlx_put_image_to_window (game->mlx, game->win, game->img->player[game->player->direction], SPRITE_SIZE * y, SPRITE_SIZE * x - 64);
 			}
 			else
 				return (1);
