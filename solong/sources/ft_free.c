@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   so_long_utils.c                                    :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,43 +12,36 @@
 
 #include "../includes/so_long.h"
 
-static void	key_hook2(int keycode, t_struct *game)
+void	ft_free_map(t_struct *game)
 {
-	if (keycode == 13 && game->gameover == 0)
+	int	i;
+
+	i = 0;
+	while (game->map->map[i])
 	{
-		game->player->direction = 1;
-		ft_move(game, game->player->x - 1, game->player->y);
+		free(game->map->map[i]);
+		i++;
 	}
-	else if (keycode == 2 && game->gameover == 0)
-	{
-		game->player->direction = 2;
-		ft_move(game, game->player->x, game->player->y + 1);
-	}
-	else if (keycode == 0 && game->gameover == 0)
-	{
-		game->player->direction = 3;
-		ft_move(game, game->player->x, game->player->y - 1);
-	}
+	free(game->map->map);
 }
 
-int	key_hook(int keycode, t_struct *game)
+void	ft_free_all(t_struct *game)
 {
-	if (keycode == 53)
-	{
-		mlx_destroy_window(game->mlx, game->win);
-		exit(0);
-	}
-	else if (keycode == 1 && game->gameover == 0)
-	{
-		game->player->direction = 0;
-		ft_move(game, game->player->x + 1, game->player->y);
-	}
-	else 
-		key_hook2(keycode, game);
-	return (0);
+	free(game->map);
+	free(game->img);
+	free(game->player);
+	free(game);
+	write(2, "Error\nInvalid map", 17);
+	exit(0);
 }
 
-int	ft_close()
+void	ft_free_init(t_struct *game)
 {
+	ft_free_map(game);
+	free(game->map);
+	free(game->img);
+	free(game->player);
+	free(game);
+	write (1, "Error\nInit failed", 17);
 	exit(0);
 }

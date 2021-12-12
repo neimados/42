@@ -31,10 +31,7 @@ void	ft_move(t_struct *game, int x, int y)
 		
 		game->map->map[game->player->x][game->player->y] = '0';
 		if (ft_print_img(game) == 1)
-		{
-			write (1, "Error\nMap printing failed", 25);
-			exit(0);
-		}
+			ft_free_init(game);
 		game->player->x = x;
 		game->player->y = y;
 	}

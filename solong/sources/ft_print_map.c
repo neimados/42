@@ -28,10 +28,34 @@ int	ft_loadimg(t_struct *game)
 	return (0);
 }
 
+static int	ft_print_loop(t_struct *game, int x, int y)
+{
+	if (game->map->map[x][y] == '0')
+		mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
+	else if (game->map->map[x][y] == '1')
+		mlx_put_image_to_window (game->mlx, game->win, game->img->wall, SPRITE_SIZE * y, SPRITE_SIZE * x);
+	else if (game->map->map[x][y] == 'C')
+	{
+		mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
+		mlx_put_image_to_window (game->mlx, game->win, game->img->col, SPRITE_SIZE * y, SPRITE_SIZE * x);
+	}
+	else if (game->map->map[x][y] == 'E')
+		mlx_put_image_to_window (game->mlx, game->win, game->img->exit, SPRITE_SIZE * y, SPRITE_SIZE * x);
+	else if (game->map->map[x][y] == 'P')
+	{
+		mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
+		mlx_put_image_to_window (game->mlx, game->win, game->img->player[game->player->direction], SPRITE_SIZE * y, SPRITE_SIZE * x - 64);
+	}
+	else
+		return (1);
+	return (0);
+}
+
 int	ft_print_img(t_struct *game)
 {
 	int	x;
 	int y;
+	char *move;
 
 	x = 0;
 	y = 0;
@@ -39,28 +63,17 @@ int	ft_print_img(t_struct *game)
 	{
 		while (game->map->map[x][y])
 		{
-			if (game->map->map[x][y] == '0')
-				mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
-			else if (game->map->map[x][y] == '1')
-				mlx_put_image_to_window (game->mlx, game->win, game->img->wall, SPRITE_SIZE * y, SPRITE_SIZE * x);
-			else if (game->map->map[x][y] == 'C')
-			{
-				mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
-				mlx_put_image_to_window (game->mlx, game->win, game->img->col, SPRITE_SIZE * y, SPRITE_SIZE * x);
-			}
-			else if (game->map->map[x][y] == 'E')
-				mlx_put_image_to_window (game->mlx, game->win, game->img->exit, SPRITE_SIZE * y, SPRITE_SIZE * x);
-			else if (game->map->map[x][y] == 'P')
-			{
-				mlx_put_image_to_window (game->mlx, game->win, game->img->ground, SPRITE_SIZE * y, SPRITE_SIZE * x);
-				mlx_put_image_to_window (game->mlx, game->win, game->img->player[game->player->direction], SPRITE_SIZE * y, SPRITE_SIZE * x - 64);
-			}
-			else
+			if (ft_print_loop(game, x, y) == 1)
 				return (1);
 			y++;
 		}
 		x++;
 		y = 0;
 	}
+	move = ft_itoa(game->player->moves);
+	ft_putstr_fd("Move(s) : ", 1);
+	ft_putstr_fd(move, 1);
+	ft_putchar_fd('\n', 1);
+	free(move);
 	return (0);
 }

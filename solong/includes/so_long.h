@@ -70,18 +70,24 @@ typedef struct s_struct
 	t_player	*player;
 }			t_struct;
 
-char	*get_next_line(int fd);
-char	*ft_read(int fd, char *buffer);
-char	*ft_strchr2(const char *str, int c);
-char	*ft_findnl(char *buffer);
-char	*ft_carry(char *buffer);
-char	*ft_strjoin2(char *s1, char *s2);
-t_map	*ft_initmap(void);
-int		ft_check_map(char *filename, t_struct *game);
-int		ft_parse_map(char *filename, t_struct *game);
-int		ft_print_img(t_struct *game);
-int		ft_loadimg(t_struct *game);
-int		ft_freeall(t_struct *game);
-void	ft_move(t_struct *game, int x, int y);
+char		*get_next_line(int fd);
+char		*ft_read(int fd, char *buffer);
+char		*ft_strchr2(const char *str, int c);
+char		*ft_findnl(char *buffer);
+char		*ft_carry(char *buffer);
+char		*ft_strjoin2(char *s1, char *s2);
+t_map		*ft_initmap(void);
+t_struct	*ft_init_struct();
+int			ft_check_map(char *filename, t_struct *game);
+int			ft_check_map_items(t_struct *game);
+int			ft_parse_map(char *filename, t_struct *game);
+int			ft_print_img(t_struct *game);
+int			ft_loadimg(t_struct *game);
+void		ft_free_all(t_struct *game);
+void		ft_move(t_struct *game, int x, int y);
+int			key_hook(int keycode, t_struct *game);
+int			ft_close();
+void		ft_free_map(t_struct *game);
+void		ft_free_init(t_struct *game);
 
 #endif

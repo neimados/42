@@ -21,10 +21,7 @@ int	ft_check_map_ext(char *filename)
 		return (1);
 	if (filename[i - 1] != 'r' || filename[i - 2] != 'e'
 	|| filename[i - 3] != 'b' || filename[i - 4] != '.')
-	{
-		write(2, "Error\nExtension not .ber", 24);
 		return (1);
-	}
 	return (0);
 }
 
@@ -38,10 +35,14 @@ int	ft_check_map_size(int fd, t_struct *game)
 	{
 		game->map->height = game->map->height + 1;
 		if (ft_strlen(str) != game->map->width)
+		{
+			free(str);
 			return (1);
+		}
 		free(str);
 		str = get_next_line(fd);
 	}
+	free(str);
 	if (game->map->height == game->map->width)
 		return (1);
 	return (0);
@@ -55,16 +56,19 @@ int	ft_check_map(char *filename, t_struct *game)
 		return (1);
 	fd = open(filename, O_RDONLY);
 	if (fd <= 0)
-	{
-		write(2, "Error\nInvalid map file", 22);
 		return (1);
-	}
 	if (ft_check_map_size(fd, game) == 1)
 	{
-		write(2, "Error\nInvalid map", 17);
 		close(fd);
 		return (1);
 	}
 	close(fd);
+	return (0);
+}
+
+int ft_check_map_items(t_struct *game)
+{
+	if (game->map->col < 1 || game->map->exit < 1 || game->map->player != 1)
+		return (1);
 	return (0);
 }
