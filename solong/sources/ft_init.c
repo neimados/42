@@ -40,5 +40,3 @@ t_struct *ft_init_struct()
 	new->gameover = 0;
 	return (new);
 }
-
-
