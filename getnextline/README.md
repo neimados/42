@@ -28,3 +28,5 @@ purposes.
   
 • In the header file get_next_line.h you must have at least the prototype of the
 function get_next_line.
+
+La difficulté du projet est de bien comprendre et utiliser les variables statiques. Pour ce projet, la variable statique nous permet de stocker le surplus renvoyé par la fonction read lorsque le BUFFER_SIZE excède une ligne. Il n'est pas autorisé de relire, il faut donc garder le contenu lu, récupérer la première ligne à renvoyer puis nettoyer le contenu de la variable statique afin que lors du prochain appel, la variable ne contiennent uniquement que les résidus de la lecture précédente. 
