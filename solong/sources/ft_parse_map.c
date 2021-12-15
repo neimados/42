@@ -6,18 +6,37 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:06:03 by dso               #+#    #+#             */
-/*   Updated: 2021/12/11 17:18:01 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/13 14:10:50 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/so_long.h"
 
+static void	ft_check_letter(t_struct *game, unsigned long i, unsigned long j)
+{
+	if (game->map->map[i][j] == 'E')
+		game->map->exit = game->map->exit + 1;
+	else if (game->map->map[i][j] == 'C')
+		game->map->col = game->map->col + 1;
+	else if (game->map->map[i][j] == 'P')
+	{
+		game->map->player = game->map->player + 1;
+		if (game->map->player == 1)
+		{
+			game->player->x = i;
+			game->player->y = j;
+		}
+		else
+			game->map->map[i][j] = '0';
+	}
+}
+
 static int	ft_parse_check2(t_struct *game, unsigned long i)
 {
 	unsigned long	j;
 
-	j = 0;
-	while (game->map->map[i][j])
+	j = -1;
+	while (game->map->map[i][++j])
 	{
 		if (i == 0 || i == game->map->height - 1)
 		{
@@ -25,19 +44,7 @@ static int	ft_parse_check2(t_struct *game, unsigned long i)
 				return (1);
 		}
 		else
-		{
-			if (game->map->map[i][j] == 'E')
-				game->map->exit = game->map->exit + 1;
-			else if (game->map->map[i][j] == 'C')
-				game->map->col = game->map->col + 1;
-			else if (game->map->map[i][j] == 'P')
-			{
-				game->map->player = game->map->player + 1;
-				game->player->x = i;
-				game->player->y = j;
-			}
-		}
-		j++;
+			ft_check_letter(game, i, j);
 	}
 	return (0);
 }
@@ -49,8 +56,9 @@ int	ft_parse_check(t_struct *game)
 	i = 0;
 	while (game->map->map[i])
 	{
-		if (game->map->map[i][0] != '1' || game->map->map[i][game->map->width -1] != '1')
-				return (1);
+		if (game->map->map[i][0] != '1'
+			|| game->map->map[i][game->map->width -1] != '1')
+			return (1);
 		if (ft_parse_check2(game, i) == 1)
 			return (1);
 		i++;

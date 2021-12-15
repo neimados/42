@@ -15,14 +15,12 @@ CFLAGS = -Wall -Wextra -Werror
 %.o: %.c ./includes/so_long.h
 		${CC} ${CFLAGS} -c $< -o $@
 
+all:	${NAME}
 
-
-$(NAME): ${OBJS}
+$(NAME): ${OBJS} 
 		make -C $(LIBFT)
 		make -C ${MINILIBX}
 		${CC} ${CFLAGS} -framework OpenGL -framework AppKit -o $@ $^ minilibx/libmlx.a libft/libft.a
-
-all:	${NAME}
 
 clean:
 		make clean -C $(LIBFT)
@@ -35,4 +33,4 @@ fclean:	clean
 
 re:		fclean all
 
-.PHONY: all clean fclean re 
+.PHONY: all clean fclean re
