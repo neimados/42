@@ -45,6 +45,12 @@ int	main(int argc, char **argv)
 		write (2, "Error\n", 6);
 		return (-1);
 	}
+	else
+	{
+		ft_free(stacka);
+		ft_free(stackb);
+		return (0);
+	}
 	if (ft_checkorder(stacka) == 1)
 		ft_push_swap(stacka, stackb);
 	ft_free(stacka);

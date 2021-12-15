@@ -28,3 +28,5 @@ Une petite description des conversions requises :
 • %x imprime un nombre en hexadécimal (base 16).
 
 • %% imprime un signe de pourcentage..
+
+La difficulté du projet réside dans ses bonus qui étaient la gestion des flags ". - + # 0 space". Pour ce faire, lors du parsing, il a donc fallu prendre en compte ces flags pour les réutiliser lors de l'impression. J'ai opté pour une structure afin de stocker les flags et ainsi les gérer individuellement.

@@ -20,6 +20,8 @@ static int	ft_onearg(char **argv, t_stack *stack)
 	i = 0;
 	if (ft_checkone(argv[1]) == 1)
  		return (1);
+	if (!argv[1][0])
+		return (2);
 	str = ft_split(argv[1], ' ');
 	if (!str)
 		return (1);
@@ -99,6 +101,8 @@ int	ft_parse(int argc, char **argv, t_stack *stack)
 	{
 		if (ft_onearg(argv, stack) == 1)
 			return (1);
+		else if (ft_onearg(argv, stack) == 2)
+			return (2);
 	}
 	else
 	{
