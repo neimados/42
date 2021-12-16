@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/07 12:06:03 by dso               #+#    #+#             */
-/*   Updated: 2021/12/11 17:07:39 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/13 10:29:04 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	ft_move(t_struct *game, int x, int y)
 		else
 			game->map->map[x][y] = 'P';
 		game->player->moves = game->player->moves + 1;
-		
 		game->map->map[game->player->x][game->player->y] = '0';
 		if (ft_print_img(game) == 1)
 			ft_free_init(game);

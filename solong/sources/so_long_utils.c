@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 10:51:47 by dso               #+#    #+#             */
-/*   Updated: 2021/12/10 10:51:57 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/13 11:52:44 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	key_hook(int keycode, t_struct *game)
 	if (keycode == 53)
 	{
 		mlx_destroy_window(game->mlx, game->win);
+		ft_free_end(game);
 		exit(0);
 	}
 	else if (keycode == 1 && game->gameover == 0)
@@ -43,12 +44,14 @@ int	key_hook(int keycode, t_struct *game)
 		game->player->direction = 0;
 		ft_move(game, game->player->x + 1, game->player->y);
 	}
-	else 
+	else
 		key_hook2(keycode, game);
 	return (0);
 }
 
-int	ft_close()
+int	ft_close(t_struct *game)
 {
+	mlx_destroy_window(game->mlx, game->win);
+	ft_free_end(game);
 	exit(0);
 }

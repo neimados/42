@@ -6,12 +6,12 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 18:15:20 by dso               #+#    #+#             */
-/*   Updated: 2021/12/11 17:07:54 by dso              ###   ########.fr       */
+/*   Updated: 2021/12/13 11:45:48 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
-#define SO_LONG_H
+# define SO_LONG_H
 
 # define BUFFER_SIZE 10
 # define SPRITE_SIZE 64
@@ -77,7 +77,7 @@ char		*ft_findnl(char *buffer);
 char		*ft_carry(char *buffer);
 char		*ft_strjoin2(char *s1, char *s2);
 t_map		*ft_initmap(void);
-t_struct	*ft_init_struct();
+t_struct	*ft_init_struct(void);
 int			ft_check_map(char *filename, t_struct *game);
 int			ft_check_map_items(t_struct *game);
 int			ft_parse_map(char *filename, t_struct *game);
@@ -86,8 +86,9 @@ int			ft_loadimg(t_struct *game);
 void		ft_free_all(t_struct *game);
 void		ft_move(t_struct *game, int x, int y);
 int			key_hook(int keycode, t_struct *game);
-int			ft_close();
+int			ft_close(t_struct *game);
 void		ft_free_map(t_struct *game);
+void		ft_free_end(t_struct *game);
 void		ft_free_init(t_struct *game);
 
 #endif
