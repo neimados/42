@@ -15,7 +15,7 @@ void	*ft_status(void *philos)
 			pthread_mutex_unlock(&philo->arglist->dead);
 			return (NULL);
 		}
-		usleep(1000);
+		usleep(100);
 	}
 	pthread_mutex_unlock(&philo->arglist->dead);
 	return (NULL);
