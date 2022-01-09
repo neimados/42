@@ -38,8 +38,8 @@ int	ft_atoi(const char *str)
 
 int	timems(void)
 {
-	int ms;
-	struct timeval time;
+	int				ms;
+	struct timeval	time;
 
 	gettimeofday(&time, NULL);
 	ms = (time.tv_sec * 1000) + (time.tv_usec / 1000);
@@ -61,14 +61,14 @@ int	ft_error(int err)
 	return (-1);
 }
 
-int	ft_checkMeals(t_philo *philo)
+int	ft_checkmeals(t_philo *ph)
 {
 	int	i;
 
 	i = 0;
-	while(i < philo->arglist->nbPhilo)
+	while (i < ph->lst->nbphilo)
 	{
-		if (philo->arglist->philos[i].meals < philo->arglist->nbEat)
+		if (ph->lst->philos[i].meals < ph->lst->nbeat)
 			return (0);
 		i++;
 	}

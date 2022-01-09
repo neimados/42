@@ -1,42 +1,56 @@
 #include "../includes/philo.h"
 
-void	ft_free(t_list *arglist)
+int	ft_cleanmutex(t_list *lst)
 {
 	int	i;
 
 	i = 0;
-	while (i < arglist->nbPhilo)
+	while (i < lst->nbphilo)
 	{
-		pthread_mutex_destroy(&arglist->forks[i]);
-		pthread_detach(arglist->philos[i].thread);
-		pthread_detach(arglist->philos[i].status);
+		pthread_detach(lst->philos[i].thread);
+		pthread_detach(lst->philos[i].status);
 		i++;
 	}
-	pthread_mutex_destroy(&arglist->dead);
-	free(arglist->forks);
-	free(arglist->philos);
-	free(arglist);
+	return (1);
 }
 
-int main (int argc, char **argv)
+void	ft_free(t_list *lst)
 {
-	t_list *arglist;
+	int	i;
+
+	i = 0;
+	while (i < lst->nbphilo)
+	{
+		pthread_mutex_destroy(&lst->forks[i]);
+		pthread_detach(lst->philos[i].thread);
+		pthread_detach(lst->philos[i].status);
+		i++;
+	}
+	pthread_mutex_destroy(&lst->dead);
+	free(lst->forks);
+	free(lst->philos);
+	free(lst);
+}
+
+int	main(int argc, char **argv)
+{
+	t_list	*lst;
 
 	if (argc != 5 && argc != 6)
 		return (ft_error(1));
-	arglist = malloc(sizeof(t_list));
-	if (!arglist)
+	lst = malloc(sizeof(t_list));
+	if (!lst)
 		return (ft_error(2));
-	if (ft_parsing(argc, argv, arglist) == 1)
+	if (ft_parsing(argc, argv, lst) == 1)
 	{	
-		free(arglist);
+		free(lst);
 		return (ft_error(3));
 	}
-	if (ft_threads(arglist) == 1)
+	if (ft_threads(lst) == 1)
 	{
-		ft_free(arglist);
+		ft_free(lst);
 		return (ft_error(5));
 	}
-	ft_free(arglist);
+	ft_free(lst);
 	return (0);
 }
