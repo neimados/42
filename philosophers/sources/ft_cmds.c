@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cmds.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 10:19:59 by dso               #+#    #+#             */
+/*   Updated: 2022/01/10 11:49:16 by dso              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 static void	ft_oneeating(t_philo *ph)
@@ -35,15 +47,15 @@ void	ft_eating(t_philo *ph)
 		ft_oneeating(ph);
 		return ;
 	}
-	usleep(2000);
+	usleep(1000);
 	pthread_mutex_lock(&ph->lst->forks[ph->forkl]);
 	if (ph->lst->end != 1)
 		printf("%d\t%d "F, (timems() - ph->lst->timetotal), ph->id);
-	usleep(2000);
+	usleep(1000);
 	pthread_mutex_lock(&ph->lst->forks[ph->forkr]);
 	if (ph->lst->end != 1)
 		printf("%d\t%d "F, (timems() - ph->lst->timetotal), ph->id);
-	usleep(2000);
+	usleep(1000);
 	if (ph->lst->end != 1)
 		printf("%d\t%d is eating\n", (timems() - ph->lst->timetotal), ph->id);
 	ph->starttime = timems();
@@ -58,7 +70,7 @@ void	ft_sleeping(t_philo *ph)
 	int	sleeptime;
 
 	sleeptime = timems();
-	usleep(8000);
+	usleep(1000);
 	if (ph->lst->end != 1)
 		printf("%d\t%d is sleeping\n", (timems() - ph->lst->timetotal), ph->id);
 	while (timems() < sleeptime + ph->lst->timetosleep && ph->lst->end != 1)
@@ -67,7 +79,7 @@ void	ft_sleeping(t_philo *ph)
 
 void	ft_thinking(t_philo *ph)
 {
-	usleep(8000);
+	usleep(1000);
 	if (ph->lst->end != 1)
 		printf("%d\t%d is thinking\n", (timems() - ph->lst->timetotal), ph->id);
 }

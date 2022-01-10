@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_threads.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 10:20:07 by dso               #+#    #+#             */
+/*   Updated: 2022/01/10 11:45:51 by dso              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 void	*ft_status(void *philos)
@@ -35,7 +47,7 @@ void	*ft_actions(void *philos)
 	{
 		if (ph->lst->end != 1)
 			ft_eating(ph);
-		if (ph->lst->nbeat != 0)
+		if (ph->lst->nbeat != -1)
 		{
 			if (ft_checkmeals(ph) == 1)
 			{

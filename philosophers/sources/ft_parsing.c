@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_parsing.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/10 10:20:03 by dso               #+#    #+#             */
+/*   Updated: 2022/01/10 11:45:05 by dso              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philo.h"
 
 static int	ft_checkargs(char **argv)
@@ -69,6 +81,7 @@ int	ft_parsing(int argc, char **argv, t_list *lst)
 	lst->timetosleep = ft_atoi(argv[4]);
 	lst->timetotal = 0;
 	lst->end = 0;
+	lst->nbeat = -1;
 	if (pthread_mutex_init(&lst->dead, NULL) != 0)
 		return (1);
 	if (argc == 6)
