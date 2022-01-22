@@ -75,11 +75,14 @@ void	ft_pipex(char **argv, char **envp)
 		if (child_process(end, argv, envp) == 1)
 			ft_error();
 	}
+	if (argv[3][0] == 'l' && argv[3][1] == 's')
+		waitpid(fork1, NULL, 0);
 	if (parent_process(end, argv, envp) == 1)
 	{
 		waitpid(fork1, NULL, 0);
 		ft_error();
 	}
+	waitpid(fork1, NULL, 0);
 	close(end[0]);
 	close(end[1]);
 }
