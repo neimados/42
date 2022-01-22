@@ -29,6 +29,8 @@ static int	ft_check_cmd(char *path_line, char **cmds, char **envp)
 	int		i;
 
 	i = 0;
+	if (access(cmds[0], F_OK) == 0)
+		execve(cmds[0], cmds, envp);
 	path = ft_calloc((ft_strlen(path_line) + 2), sizeof(char));
 	if (!path)
 		return (1);
