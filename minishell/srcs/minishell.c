@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/01/29 11:37:25 by dso              ###   ########.fr       */
+/*   Updated: 2022/01/31 16:55:47 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,15 @@ void	ft_input(void)
 		if (input == NULL)
 		{
 			printf("\b\bExiting minishell\n");
+			//free
 			exit(EXIT_SUCCESS);
 		}
-		if (ft_parsing(input, mshell) == 0)
+		if (ft_parsing(input, mshell) == 1)
 		{
-			//ft_exec(struct);
+			//free;
 		}
+		else
+			//ft_exec;
 		free(input);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/01/29 17:52:41 by dso              ###   ########.fr       */
+/*   Updated: 2022/01/31 18:36:00 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 char **g_mini_env;
 
@@ -31,7 +34,7 @@ struct s_cmds
 {
 	char		**cmd;
 	char		*infile; // < infile
-	int			type; //1 = > ; 2 = >>
+	int			type; //1 = > ; 2 = >> ; 
 	char		*outfile; // > outfile (open)
 	t_cmds		*next;
 };
@@ -50,7 +53,6 @@ struct s_minishell
 	int			nb_sq;
 	int			nb_dq;
 	int			nb_pipe;
-	int			heredoc; // << + function write outfile + unlink
 };
 
 void	ft_input(void);
