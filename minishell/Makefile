@@ -1,7 +1,7 @@
 NAME = minishell
 
 SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
-./srcs/parsing/ft_split.c ./srcs/parsing/ft_envp.c
+./srcs/parsing/ft_split.c ./srcs/parsing/ft_envp.c ./srcs/parsing/ft_itoa.c
 
 OBJS = ${SRC:.c=.o}
 

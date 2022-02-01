@@ -23,6 +23,8 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <string.h>
+# include <errno.h>
 
 char **g_mini_env;
 
@@ -34,7 +36,7 @@ struct s_cmds
 {
 	char		**cmd;
 	char		*infile; // < infile
-	int			type; //1 = > ; 2 = >> ; 
+	int			type; //1 = > ; 2 = >> (append); 
 	char		*outfile; // > outfile (open)
 	t_cmds		*next;
 };
@@ -62,5 +64,9 @@ char	**d_split(char *s, char c);
 char	*d_strdup(const char *str);
 size_t	d_strlen(const char *str);
 void	*d_calloc(size_t count, size_t size);
+char	*d_strjoin(char *s1, char *s2);
+char	*d_itoa(int n);
+int		d_strncmp(const char *a, const char *b, size_t size);
+char	*d_substr(char const *s, unsigned int start, size_t len);
 
 #endif

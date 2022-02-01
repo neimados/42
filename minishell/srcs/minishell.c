@@ -44,7 +44,7 @@ void	ft_input(void)
 		add_history(input);
 		if (input == NULL)
 		{
-			printf("\b\bExiting minishell\n");
+			printf("\b\bexit\n");
 			//free
 			exit(EXIT_SUCCESS);
 		}
