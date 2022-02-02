@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/01/31 16:55:47 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/02 17:57:08 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,33 @@ void	ft_input(void)
 		{
 			printf("\b\bexit\n");
 			//free
-			exit(EXIT_SUCCESS);
+			//exit(EXIT_SUCCESS);
+			free(mshell);
+			return ;
 		}
 		if (ft_parsing(input, mshell) == 1)
 		{
 			//free;
 		}
 		else
+		{
 			//ft_exec;
+			//TEST
+			t_cmds	*test;
+			test = mshell->cmds;
+			while (test != NULL)
+			{
+				d_free_tab(test->cmd);
+				if (test->infile)
+					free(test->infile);
+				else if (test->outfile)
+					free(test->outfile);
+				test = test->next;
+				free(mshell->cmds);
+				mshell->cmds = test;
+			}
+			//TEST
+		}
 		free(input);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/01/31 18:36:00 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/02 17:43:49 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,18 @@ char	*d_strjoin(char *s1, char *s2);
 char	*d_itoa(int n);
 int		d_strncmp(const char *a, const char *b, size_t size);
 char	*d_substr(char const *s, unsigned int start, size_t len);
+void	d_free_tab(char **tab);
+void	d_init_struct(t_minishell *mshell);
+t_cmds	*d_init_cmds(void);
+void	*d_add_cmds(t_minishell *mshell, t_cmds *cmd);
+int		d_count_tab(char **tmp);
+int		d_check_quotes(char *input, t_minishell *mshell);
+int		d_check_end(char *input);
+int		d_count_cmds(char **args);
+void	d_put_cmds(char **args, t_cmds *cmd, t_var *vars);
+char	*d_create_heredoc(int i);
+void	d_start_heredoc(char *hd_stop, char *heredoc);
+char	*d_check_vars(char *tmp, t_var *vars);
+int		d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc);
 
 #endif
