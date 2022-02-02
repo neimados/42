@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:14:53 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/02 18:51:24 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	ft_parsing(char *input, t_minishell *mshell)
 	// 	printf("\n");
 	// 	test = test->next;
 	// }
+	// exit(0);
 	// //TEST
 	return (0);
 }

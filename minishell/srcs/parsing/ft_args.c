@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:14:19 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/02 19:00:08 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,23 +77,23 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 				{
 					if (end == 0)
 					{
+						tmp = d_substr(args[i], start, j - start);
+						cmd->outfile= d_check_vars(tmp, vars);
+						free(tmp);
 						if (out == 1)
 						{
 							cmd->type = 1;
-							fd = open(cmd->outfile, O_WRONLY | O_TRUNC | O_CREAT, 0777);
+							fd = open(cmd->outfile, O_RDWR | O_TRUNC | O_CREAT, 0777);
 							if (fd == -1)
 								end = 1;
 						}
 						else if (out == 2)
 						{
 							cmd->type = 2;
-							fd = open(cmd->outfile, O_WRONLY | O_APPEND | O_CREAT, 0777);
+							fd = open(cmd->outfile, O_RDWR | O_APPEND | O_CREAT, 0777);
 							if (fd == -1)
 								end = 1;
 						}
-						tmp = d_substr(args[i], start, j - start);
-						cmd->outfile= d_check_vars(tmp, vars);
-						free(tmp);
 						close(fd);
 					}
 					out = 0;

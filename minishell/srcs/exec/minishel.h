@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishel.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:33:35 by kmammeri         ###   ########.fr       */
+/*   Created: 2022/01/26 18:41:13 by kmammeri          #+#    #+#             */
+/*   Updated: 2022/01/31 17:16:39 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHEL_H
+# define MINISHEL_H
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -20,11 +19,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-# include <sys/types.h>
-# include <sys/stat.h>
 # include <fcntl.h>
-# include <string.h>
 # include <errno.h>
+# include <string.h>
 
 char						**g_mini_env;
 
@@ -35,12 +32,12 @@ typedef struct s_var		t_var;
 struct s_cmds
 {
 	char		**cmd;
-	char		*infile; // < infile
-	int			type; //1 = > ; 2 = >> (append); 
-	char		*outfile; // > outfile (open)
-	t_cmds		*next;
+	char		*infile; // <
+	char		*outfile; // >
+	int			type; // > = 1 ; >> = 2
 	int			pipe[2]; // ajout du pipe de la cmd ( pipe = 0 si sep = ;) 
-	pid_t		pid_child;
+	pid_t		pid_child; // ajout 
+	t_cmds		*next;
 };
 
 struct s_var
@@ -54,36 +51,18 @@ struct s_minishell
 {
 	t_cmds		*cmds;
 	t_var		*vars;
+	int			nb_cmds;
 	int			nb_sq;
-	int			nb_dq;
+	int			nb_dq;// +escape backslash
 	int			nb_pipe;
+	int			heredoc; // << + function write outfile + unlink
 };
-// parsing
+
 void	ft_input(void);
 void	ft_cp_env(char **envp);
 int		ft_parsing(char *input, t_minishell *mshell);
 char	**d_split(char *s, char c);
 char	*d_strdup(const char *str);
-size_t	d_strlen(const char *str);
-void	*d_calloc(size_t count, size_t size);
-char	*d_strjoin(char *s1, char *s2);
-char	*d_itoa(int n);
-int		d_strncmp(const char *a, const char *b, size_t size);
-char	*d_substr(char const *s, unsigned int start, size_t len);
-void	d_free_tab(char **tab);
-void	d_init_struct(t_minishell *mshell);
-t_cmds	*d_init_cmds(void);
-void	*d_add_cmds(t_minishell *mshell, t_cmds *cmd);
-int		d_count_tab(char **tmp);
-int		d_check_quotes(char *input, t_minishell *mshell);
-int		d_check_end(char *input);
-int		d_count_cmds(char **args);
-void	d_put_cmds(char **args, t_cmds *cmd, t_var *vars);
-char	*d_create_heredoc(int i);
-void	d_start_heredoc(char *hd_stop, char *heredoc);
-char	*d_check_vars(char *tmp, t_var *vars);
-int		d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc);
-// exec
 void	k_loop_forks(t_minishell *minishell);
 char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *src);
