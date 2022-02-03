@@ -83,6 +83,7 @@ char	*d_create_heredoc(int i);
 void	d_start_heredoc(char *hd_stop, char *heredoc);
 char	*d_check_vars(char *tmp, t_var *vars);
 int		d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc);
+
 // exec
 void	k_loop_forks(t_minishell *minishell);
 char	**ft_split(char const *s, char c);

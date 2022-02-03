@@ -19,7 +19,6 @@ char	*d_create_heredoc(int i)
 	int		fd;
 	
 	c = d_itoa(i);
-	filename = d_calloc(24, sizeof(char));
 	filename = d_strdup("./srcs/heredoc/.heredoc");
 	filename = d_strjoin(filename, c);
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0777);

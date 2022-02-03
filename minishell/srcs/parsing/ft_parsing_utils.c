@@ -20,11 +20,9 @@ void	d_free_tab(char **tab)
 	if (!tab)
 		return ;
 	while (tab[i])
-		i++;
-	while (i >= 0)
 	{
 		free(tab[i]);
-		i--;
+		i++;
 	}
 	free(tab);
 }
@@ -38,7 +36,7 @@ int	d_check_end(char *input)
 	j = 0;
 	while (input[j] == ' ' && input[j])
 		j++;
-	if (i > 0)
+	if (i >= 0)
 	{
 		while (input[i] == ' ')
 			i--;

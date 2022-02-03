@@ -58,9 +58,9 @@ int	ft_parsing(char *input, t_minishell *mshell)
 			}
 		}
 		i++;
+		d_free_tab(args);
 	}
 	d_free_tab(tmp);
-	d_free_tab(args);
 	// //TEST
 	// t_cmds *test;
 	// test = mshell->cmds;

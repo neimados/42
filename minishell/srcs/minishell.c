@@ -21,8 +21,8 @@ static void	ft_signal(int keycode)
 	}
 	if (keycode == SIGQUIT)
 	{
-		printf("\b\b \b\b");
-		//rl_replace_line("", 0); TO FIX
+		//printf("\b\b \b\b");
+		//rl_replace_line("", 0);
 	}
 }
 
@@ -46,34 +46,29 @@ void	ft_input(void)
 		{
 			printf("\b\bexit\n");
 			//free
-			//exit(EXIT_SUCCESS);
 			free(mshell);
-			return ;
+			exit(EXIT_SUCCESS);
 		}
-		if (ft_parsing(input, mshell) == 1)
+		if (ft_parsing(input, mshell) == 0)
 		{
-			//free;
+			//k_loop_forks(mshell);
 		}
-		else
+		//TEST
+		t_cmds	*test;
+		test = mshell->cmds;
+		while (test != NULL)
 		{
-			k_loop_forks(mshell);
-			//TEST
-			t_cmds	*test;
-			test = mshell->cmds;
-			while (test != NULL)
-			{
-				d_free_tab(test->cmd);
-				if (test->infile)
-					free(test->infile);
-				else if (test->outfile)
-					free(test->outfile);
-				test = test->next;
-				free(mshell->cmds);
-				mshell->cmds = test;
-			}
-			//TEST
+			d_free_tab(test->cmd);
+			if (test->infile)
+				free(test->infile);
+			else if (test->outfile)
+				free(test->outfile);
+			test = test->next;
+			free(mshell->cmds);
+			mshell->cmds = test;
 		}
 		free(input);
+		//TEST
 	}
 }
 

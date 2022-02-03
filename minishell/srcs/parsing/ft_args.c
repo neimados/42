@@ -57,7 +57,7 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 					if (in == 1 && end == 0)
 					{
 						tmp = d_substr(args[i], start, j - start);
-						cmd->infile= d_check_vars(tmp, vars);
+						cmd->infile = d_check_vars(tmp, vars);
 						free(tmp);
 						fd = open(cmd->infile, O_RDONLY);
 						if (fd == -1)
