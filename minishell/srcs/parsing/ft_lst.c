@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 11:11:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:01:47 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/05 18:07:39 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	d_init_struct(t_minishell *mshell)
 	mshell->nb_sq = 0;
 	mshell->nb_dq = 0;
 	mshell->nb_pipe = 0;
-	mshell->vars = NULL;
 	mshell->cmds = NULL;
 }
 
@@ -30,6 +29,7 @@ t_cmds	*d_init_cmds(void)
 	cmds->cmd = NULL;
 	cmds->infile = NULL;
 	cmds->type = 0;
+	cmds->heredoc = 0;
 	cmds->outfile = NULL;
 	cmds->next = NULL;
 	return (cmds);

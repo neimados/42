@@ -6,13 +6,13 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 19:00:08 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/05 18:13:21 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
+int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 {
 	int		i;
 	int		j;
@@ -34,7 +34,6 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 	cmd->cmd = d_calloc((d_count_cmds(args) + 1), sizeof(char *));
 	if (!cmd->cmd)
 		return (1);
-	d_put_cmds(args, cmd, vars);
 	while (args[i])
 	{
 		while (args[i][j])
@@ -57,7 +56,7 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 					if (in == 1 && end == 0)
 					{
 						tmp = d_substr(args[i], start, j - start);
-						cmd->infile = d_check_vars(tmp, vars);
+						cmd->infile = d_check_vars(tmp, mshell);
 						free(tmp);
 						fd = open(cmd->infile, O_RDONLY);
 						if (fd == -1)
@@ -69,7 +68,10 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 						hd_stop = d_substr(args[i], start, j - start);
 						d_start_heredoc(hd_stop, heredoc);
 						if (end == 0)
-						cmd->infile = heredoc;
+						{
+							cmd->heredoc = 1;
+							cmd->infile = heredoc;
+						}
 					}
 					in = 0;
 				}
@@ -78,7 +80,7 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 					if (end == 0)
 					{
 						tmp = d_substr(args[i], start, j - start);
-						cmd->outfile= d_check_vars(tmp, vars);
+						cmd->outfile= d_check_vars(tmp, mshell);
 						free(tmp);
 						if (out == 1)
 						{
@@ -103,7 +105,11 @@ int	d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc)
 		i++;
 		j = 0;
 	}
+	d_put_cmds(args, cmd, mshell);
 	if (end == 1)
-		printf("%s\n", strerror(errno));
+	{
+		printf("%s : No such file or directory\n", cmd->infile);
+		mshell->error = 1;
+	}
 	return (0);
 }

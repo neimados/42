@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:33:35 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/02/05 18:03:45 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,22 @@ struct s_cmds
 	char		**cmd;
 	char		*infile; // < infile
 	int			type; //1 = > ; 2 = >> (append); 
+	int			heredoc;
 	char		*outfile; // > outfile (open)
 	t_cmds		*next;
 	int			pipe[2]; // ajout du pipe de la cmd ( pipe = 0 si sep = ;) 
 	pid_t		pid_child;
 };
 
-struct s_var
-{
-	char	*name;
-	char	*value;
-	t_var	*next;
-};
-
 struct s_minishell
 {
 	t_cmds		*cmds;
-	t_var		*vars;
 	int			nb_sq;
 	int			nb_dq;
 	int			nb_pipe;
+	int			error;
 };
+
 // parsing
 void	ft_input(void);
 void	ft_cp_env(char **envp);
@@ -78,11 +73,11 @@ int		d_count_tab(char **tmp);
 int		d_check_quotes(char *input, t_minishell *mshell);
 int		d_check_end(char *input);
 int		d_count_cmds(char **args);
-void	d_put_cmds(char **args, t_cmds *cmd, t_var *vars);
+void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
 char	*d_create_heredoc(int i);
 void	d_start_heredoc(char *hd_stop, char *heredoc);
-char	*d_check_vars(char *tmp, t_var *vars);
-int		d_put_args(char **args, t_cmds *cmd, t_var *vars, char *heredoc);
+char	*d_check_vars(char *tmp, t_minishell *mshell);
+int		d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell);
 
 // exec
 void	k_loop_forks(t_minishell *minishell);
@@ -92,5 +87,15 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 size_t	ft_strlen(const char *str);
 char	*ft_strrchr(const char *str, int chr);
 char	*ft_strjoin(char const *s1, char const *s2);
+
+// builtin
+void	ft_pwd(char **cmds);
+void	ft_exit(t_minishell *mshell, char **cmds);
+void	ft_env(char **cmds);
+void	ft_echo(char **cmds);
+void	ft_export(char **cmds);
+void	ft_cd(char **cmds);
+void	ft_unset(char **cmds);
+void	k_error(char *str1, char *str2, char **env);
 
 #endif

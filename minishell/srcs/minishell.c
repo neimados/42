@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:36:55 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/02/05 17:36:32 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,14 @@ static void	ft_signal(int keycode)
 	if (keycode == SIGINT)
 	{
 		printf("\n");
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
 		ft_input();
 	}
 	if (keycode == SIGQUIT)
 	{
-		//printf("\b\b \b\b");
+		printf("\b\b \b\b");
 		//rl_replace_line("", 0);
 	}
 }
@@ -31,6 +34,7 @@ void	ft_input(void)
 	char				*input;
 	struct sigaction	signals;
 	t_minishell			*mshell;
+	int					tmp;
 
 	signals.sa_handler = ft_signal;
 	sigaction(SIGINT, &signals, NULL);
@@ -40,7 +44,9 @@ void	ft_input(void)
 		exit(EXIT_FAILURE);
 	while (1)
 	{
+		tmp = errno;
 		input = readline("minishell$> ");
+		errno = tmp;
 		add_history(input);
 		if (input == NULL)
 		{
@@ -51,7 +57,7 @@ void	ft_input(void)
 		}
 		if (ft_parsing(input, mshell) == 0)
 		{
-			//k_loop_forks(mshell);
+			k_loop_forks(mshell);
 		}
 		//TEST
 		t_cmds	*test;

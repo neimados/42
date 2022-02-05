@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:38:58 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 17:39:34 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/04 16:20:56 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*d_create_heredoc(int i)
 	int		fd;
 	
 	c = d_itoa(i);
-	filename = d_strdup("./srcs/heredoc/.heredoc");
+	filename = d_strdup("./srcs/builtins/.heredoc");
 	filename = d_strjoin(filename, c);
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 	if (fd == -1)

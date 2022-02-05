@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 17:28:29 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/05 18:03:36 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	d_count_cmds(char **args)
 	return (count);
 }
 
-void	d_put_cmds(char **args, t_cmds *cmd, t_var *vars)
+void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell)
 {
 	int		i;
 	int		j;
@@ -76,7 +76,7 @@ void	d_put_cmds(char **args, t_cmds *cmd, t_var *vars)
 				if (sign == 0)
 				{
 					tmp = d_substr(args[i], 0, j);
-					cmd->cmd[k++] = d_check_vars(tmp, vars);
+					cmd->cmd[k++] = d_check_vars(tmp, mshell);
 					free(tmp);
 				}
 				else

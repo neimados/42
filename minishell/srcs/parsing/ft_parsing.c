@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:51:24 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/05 18:01:15 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	ft_parsing(char *input, t_minishell *mshell)
 		heredoc = d_create_heredoc(i);
 		if (!heredoc)
 			return (1);
-		if (d_put_args(args, cmd, mshell->vars, heredoc) == 1)
+		if (d_put_args(args, cmd, heredoc, mshell) == 1)
 			return (1);
 		d_add_cmds(mshell, cmd);
 		if (!cmd->infile)
