@@ -10,31 +10,31 @@ SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
 ./srcs/exec/split.c ./srcs/exec/libft.c ./srcs/exec/libft_utils.c \
 ./srcs/builtins/ft_echo.c ./srcs/builtins/ft_env.c ./srcs/builtins/ft_exit.c \
 ./srcs/builtins/ft_pwd.c ./srcs/builtins/ft_export.c ./srcs/builtins/ft_unset.c \
-./srcs/builtins/ft_cd.c
+./srcs/builtins/ft_cd.c ./srcs/signals/ft_signals.c
 
 OBJS = ${SRC:.c=.o}
 
 CC		= gcc
 CFLAGS = -Wall -Wextra -Werror
 
-# READLINE_LIB	=	-L$(shell brew --prefix readline)/lib
-# READLINE_INC	=	-I$(shell brew --prefix readline)/include
-
-# %.o: %.c ./includes/minishell.h Makefile
-# 		${CC} ${CFLAGS} ${READLINE_INC} -c $< -o $@
-
-# all:	${NAME}
-
-# $(NAME): ${OBJS}
-# 		${CC} ${CFLAGS} -lreadline ${READLINE_LIB} ${READLINE_INC} -o $@ $^
+READLINE_LIB	=	-L$(shell brew --prefix readline)/lib
+READLINE_INC	=	-I$(shell brew --prefix readline)/include
 
 %.o: %.c ./includes/minishell.h Makefile
-		${CC} ${CFLAGS} -c $< -o $@
+		${CC} ${CFLAGS} ${READLINE_INC} -c $< -o $@
 
 all:	${NAME}
 
 $(NAME): ${OBJS}
-		${CC} ${CFLAGS} -lreadline -o $@ $^
+		${CC} ${CFLAGS} -lreadline ${READLINE_LIB} ${READLINE_INC} -o $@ $^
+
+# %.o: %.c ./includes/minishell.h Makefile
+# 		${CC} ${CFLAGS} -c $< -o $@
+
+# all:	${NAME}
+
+# $(NAME): ${OBJS}
+# 		${CC} ${CFLAGS} -lreadline -o $@ $^
 
 clean:
 		${RM} ${OBJS}

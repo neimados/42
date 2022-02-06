@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+# include <termios.h>
 
 char						**g_mini_env;
 
@@ -97,5 +98,12 @@ void	ft_export(char **cmds);
 void	ft_cd(char **cmds);
 void	ft_unset(char **cmds);
 void	k_error(char *str1, char *str2, char **env);
+
+//signals
+void	ft_block_signal(int keycode);
+void	ft_signal(int keycode, void (*f)(int, siginfo_t *, void *));
+void	ft_handle_signal(int keycode, siginfo_t *s, void *tmp);
+int		ft_terminal(void);
+void	ft_set_terminal(struct termios *terminal);
 
 #endif

@@ -40,7 +40,10 @@ int	ft_parsing(char *input, t_minishell *mshell)
 			return (1);
 		heredoc = d_create_heredoc(i);
 		if (!heredoc)
+		{
+			printf("Failed to create heredoc\n");
 			return (1);
+		}
 		if (d_put_args(args, cmd, heredoc, mshell) == 1)
 			return (1);
 		d_add_cmds(mshell, cmd);
