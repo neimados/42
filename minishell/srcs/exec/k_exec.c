@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/09 18:31:27 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 18:47:36 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ void	k_child(t_minishell *minishell, int i)
 	{
 		if (tmp->infile)
 		{
-			fd_in = open(tmp->next->infile, O_RDONLY);
+			fd_in = open(tmp->infile, O_RDONLY);
 			if (fd_in == -1)
-				ft_error(strerror(errno), tmp->next->infile);
+				ft_error(strerror(errno), tmp->infile);
 			if (dup2(fd_in, STDIN_FILENO) == -1)
 				ft_error(strerror(errno), NULL);
 			close(fd_in);
@@ -267,12 +267,6 @@ void	k_loop_forks(t_minishell *minishell)
 	}
 	i -= 1;
 	j = i;
-	while (tmp2)
-	{
-		if (tmp2->heredoc == 1)
-			unlink(tmp2->infile);
-		tmp2 = tmp2->next;
-	}
 	tmp2 = minishell->cmds->next;
 	while (tmp2)
 	{
@@ -289,6 +283,13 @@ void	k_loop_forks(t_minishell *minishell)
 			g_error[0] = d_itoa(WEXITSTATUS(stat[0]));
 		}
 		i--;
+	}
+	tmp2 = minishell->cmds;
+	while (tmp2)
+	{
+		if (tmp2->heredoc == 1)
+			unlink(tmp2->infile);
+		tmp2 = tmp2->next;
 	}
 	ft_signal(SIGINT, ft_handle_signal);
 	ft_terminal(0);
