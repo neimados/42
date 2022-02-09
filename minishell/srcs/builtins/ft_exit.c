@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/05 12:36:56 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 17:22:49 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static int	d_check_digit(char *cmd)
 	int	i;
 
 	i = 0;
+	if (cmd[0] == '-')
+		i++;
 	while (cmd[i])
 	{
 		if (cmd[i] < '0' || cmd[i] > '9')
@@ -26,13 +28,10 @@ static int	d_check_digit(char *cmd)
 	return (0);
 }
 
-void	ft_exit(t_minishell *mshell, char **cmds)
+static void	d_loop_free_exit(t_minishell *mshell)
 {
 	t_cmds	*test;
 
-	if (cmds[1])
-		if (d_check_digit(cmds[1]) == 1)
-			printf("exit: %s: numeric argument required\n", cmds[1]);
 	test = mshell->cmds;
 	while (test != NULL)
 	{
@@ -45,7 +44,34 @@ void	ft_exit(t_minishell *mshell, char **cmds)
 		free(mshell->cmds);
 		mshell->cmds = test;
 	}
+}
+
+void	ft_exit(t_minishell *mshell, char **cmds)
+{
+	unsigned char	error;
+	
+	error = d_atoi(g_error[0]);
+	if (cmds[1])
+	{
+		if (d_check_digit(cmds[1]) == 1)
+		{
+			d_putstr_fd("exit: ", 2);
+			d_putstr_fd(cmds[1], 2);
+			d_putstr_fd(": numeric argument required\n", 2);
+			d_free_tab(g_error);
+			g_error = d_calloc(3, sizeof(char *));
+			g_error[0] = d_strdup("255");
+		}
+		error = d_atoi(cmds[1]);
+		if (error)
+		while (error > 255)
+			error = error - 256;
+	}
+	d_loop_free_exit(mshell);
+	printf("\b\bexit\n");
+	free(mshell->pwd);
+	d_free_tab(mshell->g_mini_env);
 	free(mshell);
-	printf("exit\n");
-	exit(EXIT_SUCCESS);
+	d_free_tab(g_error);
+	exit(error);
 }

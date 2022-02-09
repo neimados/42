@@ -6,22 +6,36 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 11:00:43 by dso               #+#    #+#             */
-/*   Updated: 2022/02/04 17:33:29 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/08 11:50:56 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static void	d_loop_echo(char *cmd, int *count)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] != '\'' && cmd[i] != '\"')
+		{
+			printf("%c", cmd[i]);
+			*count += 1;
+		}
+		i++;
+	}
+}
+
 void	ft_echo(char **cmds)
 {
 	int	i;
-	int	j;
 	int	n;
 	int	size;
 	int	count;
 
 	i = 1;
-	j = 0;
 	n = 0;
 	size = d_count_tab(cmds);
 	if (cmds[1][0] == '-' && cmds[1][1] == 'n')
@@ -31,17 +45,8 @@ void	ft_echo(char **cmds)
 	}
 	while (cmds[i])
 	{
-		while (cmds[i][j])
-		{
-			if (cmds[i][j] != '\'' && cmds[i][j] != '\"')
-			{
-				printf("%c", cmds[i][j]);
-				count++;
-			}
-			j++;
-		}
+		d_loop_echo(cmds[i], &count);
 		i++;
-		j = 0;
 		if (i < size && count != 0)
 			printf(" ");
 		count = 0;

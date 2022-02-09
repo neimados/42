@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/05 18:42:19 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 18:19:19 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 					else if (in == 2)
 					{
 						hd_stop = d_substr(args[i], start, j - start);
-						d_start_heredoc(hd_stop, heredoc);
+						d_start_heredoc(hd_stop, heredoc, mshell);
 						if (end == 0)
 						{
 							cmd->heredoc = 1;
@@ -108,8 +108,11 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 	d_put_cmds(args, cmd, mshell);
 	if (end == 1)
 	{
-		printf("%s : No such file or directory\n", cmd->infile);
-		mshell->error = 1;
+		d_putstr_fd(cmd->infile, 2);
+		d_putstr_fd(" : No such file or directory\n", 2);
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("1");
 	}
 	return (0);
 }

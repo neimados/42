@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 11:51:50 by dso               #+#    #+#             */
-/*   Updated: 2022/01/29 16:48:54 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 17:03:39 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ static int	ft_countwords(char const *str, char c)
 			count++;
 			while (str[i] != c && str[i])
 			{
-				if(str[i] == '\'')
+				if (str[i] == '\'')
 				{
 					i++;
 					while (str[i] && str[i] != '\'')
 						i++;
 					i++;
 				}
-				else if(str[i] == '\"')
+				else if (str[i] == '\"')
 				{
 					i++;
 					while (str[i] && str[i] != '\"')
@@ -84,7 +84,7 @@ static void	ft_malloctab(char const *str, char c, char **strs)
 		{
 			while (str[i] != c && str[i])
 			{
-				if(str[i] == '\'')
+				if (str[i] == '\'')
 				{
 					i++;
 					count++;
@@ -96,7 +96,7 @@ static void	ft_malloctab(char const *str, char c, char **strs)
 					i++;
 					count++;
 				}
-				else if(str[i] == '\"')
+				else if (str[i] == '\"')
 				{
 					i++;
 					count++;
@@ -152,7 +152,7 @@ static void	ft_filltab(char const *str, char c, char **strs, int words)
 				{
 					strs[j][k++] = str[i++];
 					while (str[i] && str[i] != '\"')
-						strs[j][k++] = str[i++];	
+						strs[j][k++] = str[i++];
 					strs[j][k++] = str[i++];
 				}
 				else
@@ -165,18 +165,23 @@ static void	ft_filltab(char const *str, char c, char **strs, int words)
 	}
 }
 
-
 char	**d_split(char *s, char c)
 {
 	char	**strs;
 	int		words;
 
 	if (!s)
+	{
+		d_putstr_fd("Split error 1\n", 2);
 		return (NULL);
+	}
 	words = ft_countwords(s, c);
 	strs = malloc(sizeof(char *) * (words + 1));
 	if (!strs)
+	{
+		d_putstr_fd("Split error 2\n", 2);
 		return (NULL);
+	}
 	strs[words] = NULL;
 	ft_malloctab(s, c, strs);
 	ft_filltab(s, c, strs, words);

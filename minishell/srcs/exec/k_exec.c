@@ -6,27 +6,15 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/05 17:46:50 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 18:31:27 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	ft_error(char *str1, char *str2, char **env)
+void	ft_error(char *str1, char *str2)
 {
-	char	*str0;
-	int		i;
-
-	i = 0;
-	while (env[i] && (env[i][0] != 'S' || env[i][1] != 'H' || env[i][2] != 'E'
-	|| env[i][3] != 'L' || env[i][4] != 'L'))
-		i++;
-	if (env[i][0] != 'S' && env[i][1] != 'H' && env[i][2] != 'E'
-	&& env[i][3] != 'L' && env[i][4] != 'L')
-		str0 = NULL;
-	else
-		str0 = ft_strrchr(env[i], '/');
-	write(2, str0 + 1, ft_strlen(str0 + 1));
+	write(2, "minishell: ", 11);
 	if (str1)
 		write(2, ": ", 2);
 	write(2, str1, ft_strlen(str1));
@@ -34,21 +22,24 @@ void	ft_error(char *str1, char *str2, char **env)
 		write(2, ": ", 2);
 	write(2, str2, ft_strlen(str2));
 	write(2, "\n", 1);
-	exit(EXIT_FAILURE);
+	if (!d_strncmp(g_error[0], "127", 3))
+		exit(127);
+	else
+		exit(errno);
 }
 
-void	k_exec_cmd(char **cmd)
+void	k_exec_cmd(char **cmd, t_minishell *minishell)
 {
 	int		i;
 	char	**path;
 
 	i = 0;
 	if (access(cmd[i], X_OK) == 0)
-		execve(cmd[i], cmd, g_mini_env);
-	while (g_mini_env[i] && (g_mini_env[i][0] != 'P' || g_mini_env[i][1] != 'A'
-	|| g_mini_env[i][2] != 'T' || g_mini_env[i][3] != 'H'))
+		execve(cmd[i], cmd, minishell->g_mini_env);
+	while (minishell->g_mini_env[i] && (minishell->g_mini_env[i][0] != 'P' || minishell->g_mini_env[i][1] != 'A'
+	|| minishell->g_mini_env[i][2] != 'T' || minishell->g_mini_env[i][3] != 'H'))
 		i++;
-	path = ft_split(g_mini_env[i] + 5, ':');
+	path = ft_split(minishell->g_mini_env[i] + 5, ':');
 	i = 0;
 	while (path[i])
 	{
@@ -60,13 +51,14 @@ void	k_exec_cmd(char **cmd)
 	while (path[++i])
 	{
 		if (access(path[i], X_OK) == 0)
-			execve(path[i], cmd, g_mini_env);
+			execve(path[i], cmd, minishell->g_mini_env);
 	}
 	free(path[0]);
-	ft_error("Command not found", cmd[0], g_mini_env);
+	g_error[0] = "127";
+	ft_error("Command not found", cmd[0]);
 }
 
-void	k_exec_builtins(char **cmd , t_minishell *minishell)
+void	k_exec_builtins(char **cmd, t_minishell *minishell)
 {
 	int	len;
 
@@ -76,13 +68,13 @@ void	k_exec_builtins(char **cmd , t_minishell *minishell)
 	else if (!d_strncmp(cmd[0], "cd", len))
 		ft_exit(minishell, cmd);
 	else if (!d_strncmp(cmd[0], "pwd", len))
-		ft_pwd(cmd);
+		ft_pwd(cmd, minishell);
 	else if (!d_strncmp(cmd[0], "export", len))
 		ft_exit(minishell, cmd);
 	else if (!d_strncmp(cmd[0], "unset", len))
 		ft_exit(minishell, cmd);
 	else if (!d_strncmp(cmd[0], "env", len))
-		ft_env(cmd);
+		ft_env(cmd, minishell);
 	else if (!d_strncmp(cmd[0], "exit", len))
 		ft_exit(minishell, cmd);
 }
@@ -99,7 +91,7 @@ void	k_is_builtin_fct(char **cmd, t_minishell *minishell)
 		k_exec_builtins(cmd, minishell);
 	else
 	{
-		k_exec_cmd(cmd);
+		k_exec_cmd(cmd, minishell);
 	}
 }
 
@@ -117,9 +109,9 @@ void	k_child(t_minishell *minishell, int i)
 		{
 			fd_in = open(tmp->next->infile, O_RDONLY);
 			if (fd_in == -1)
-				ft_error(strerror(errno), tmp->next->infile, g_mini_env);
+				ft_error(strerror(errno), tmp->next->infile);
 			if (dup2(fd_in, STDIN_FILENO) == -1)
-				ft_error(strerror(errno), NULL, g_mini_env);
+				ft_error(strerror(errno), NULL);
 			close(fd_in);
 		}
 		if (tmp->outfile)
@@ -128,20 +120,20 @@ void	k_child(t_minishell *minishell, int i)
 			{
 				fd_out = open(tmp->outfile, O_WRONLY | O_TRUNC | O_CREAT, 0666);
 				if (dup2(fd_out, STDOUT_FILENO) == -1)
-					ft_error(strerror(errno), NULL, g_mini_env);
+					ft_error(strerror(errno), NULL);
 			}
 			else if (tmp->type == 2)
 			{
 				fd_out = open(tmp->outfile, O_WRONLY | O_APPEND
 						| O_CREAT, 0666);
 				if (dup2(fd_out, STDOUT_FILENO) == -1)
-					ft_error(strerror(errno), NULL, g_mini_env);
+					ft_error(strerror(errno), NULL);
 			}
 		}
 		else if (tmp->next)
 		{
 			if (dup2(tmp->next->pipe[1], STDOUT_FILENO) == -1)
-				ft_error(strerror(errno), NULL, g_mini_env);
+				ft_error(strerror(errno), NULL);
 			close(tmp->next->pipe[1]);
 		}
 		k_is_builtin_fct(tmp->cmd, minishell);
@@ -150,8 +142,8 @@ void	k_child(t_minishell *minishell, int i)
 	{
 		if (tmp->next)
 		{
-			close(tmp->pipe[0]);
-			close(tmp->pipe[1]);
+			close(tmp->next->pipe[0]);
+			close(tmp->next->pipe[1]);
 		}
 		tmp = tmp->next;
 		i--;
@@ -165,9 +157,9 @@ void	k_child(t_minishell *minishell, int i)
 			close(tmp->pipe[0]);
 			fd_in = open(tmp->infile, O_RDONLY);
 			if (fd_in == -1)
-				ft_error(strerror(errno), tmp->infile, g_mini_env);
+				ft_error(strerror(errno), tmp->infile);
 			if (dup2(fd_in, STDIN_FILENO) == -1)
-				ft_error(strerror(errno), NULL, g_mini_env);
+				ft_error(strerror(errno), NULL);
 			close(fd_in);
 		}
 		else if (i != 0)
@@ -175,7 +167,7 @@ void	k_child(t_minishell *minishell, int i)
 			close (tmp->pipe[1]);
 			fd_in = tmp->pipe[0];
 			if (dup2(fd_in, STDIN_FILENO) == -1)
-				ft_error(strerror(errno), NULL, g_mini_env);
+				ft_error(strerror(errno), NULL);
 			close(fd_in);
 		}
 		if (tmp->outfile)
@@ -186,20 +178,20 @@ void	k_child(t_minishell *minishell, int i)
 			{
 				fd_out = open(tmp->outfile, O_WRONLY | O_TRUNC | O_CREAT, 0666);
 				if (dup2(fd_out, STDOUT_FILENO) == -1)
-					ft_error(strerror(errno), NULL, g_mini_env);
+					ft_error(strerror(errno), NULL);
 			}
 			else if (tmp->type == 2)
 			{
 				fd_out = open(tmp->outfile, O_WRONLY | O_APPEND
 						| O_CREAT, 0666);
 				if (dup2(fd_out, STDOUT_FILENO) == -1)
-					ft_error(strerror(errno), NULL, g_mini_env);
+					ft_error(strerror(errno), NULL);
 			}
 		}
 		else if (tmp->next)
 		{
 			if (dup2(tmp->next->pipe[1], STDOUT_FILENO) == -1)
-				ft_error(strerror(errno), NULL, g_mini_env);
+				ft_error(strerror(errno), NULL);
 			close(tmp->next->pipe[1]);
 		}
 		k_is_builtin_fct(tmp->cmd, minishell);
@@ -209,18 +201,27 @@ void	k_child(t_minishell *minishell, int i)
 void	k_loop_forks(t_minishell *minishell)
 {
 	int		i;
+	int		j;
+	char	*pidtmp;
 	int		nbcmd;
 	pid_t	*forks;
 	t_cmds	*tmp;
 	t_cmds	*tmp2;
+	int		stat[1];
 
 	if (minishell->cmds == NULL)
 		return ;
 	if (minishell->cmds->cmd[0] == NULL)
-		return ;	
+		return ;
 	tmp = minishell->cmds;
 	tmp2 = tmp;
-	nbcmd = minishell->nb_pipe + 1;
+	nbcmd = 0;
+	while (tmp2)
+	{
+		nbcmd++;
+		tmp2 = tmp2->next;
+	}
+	tmp2 = tmp;
 	i = d_strlen(tmp->cmd[0]);
 	if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "exit", i))
 	{
@@ -229,19 +230,21 @@ void	k_loop_forks(t_minishell *minishell)
 	}
 	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "export", i))
 	{
-		ft_export(tmp->cmd);
+		ft_export(tmp->cmd, minishell);
 		return ;
 	}
 	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "cd", i))
 	{
-		ft_cd(tmp->cmd);
+		ft_cd(tmp->cmd, minishell);
 		return ;
 	}
 	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "unset", i))
 	{
-		ft_unset(tmp->cmd);
+		ft_unset(tmp->cmd, minishell);
 		return ;
 	}
+	ft_signal(SIGINT, ft_handle_signal_child);
+	ft_terminal(1);
 	forks = malloc(sizeof(pid_t) * nbcmd);
 	i = 0;
 	while (i < nbcmd)
@@ -255,25 +258,39 @@ void	k_loop_forks(t_minishell *minishell)
 				close(tmp->next->pipe[0]);
 			k_child(minishell, i);
 		}
+		g_error[1] = d_strjoin(g_error[1], " ");
+		pidtmp = d_itoa(forks[i]);
+		g_error[1] = d_strjoin(g_error[1], pidtmp);
+		free(pidtmp);
 		tmp = tmp->next;
 		i++;
 	}
 	i -= 1;
+	j = i;
+	while (tmp2)
+	{
+		if (tmp2->heredoc == 1)
+			unlink(tmp2->infile);
+		tmp2 = tmp2->next;
+	}
+	tmp2 = minishell->cmds->next;
+	while (tmp2)
+	{
+		close(tmp2->pipe[0]);
+		close(tmp2->pipe[1]);
+		tmp2 = tmp2->next;
+	}
 	while (i >= 0)
 	{
-		if (tmp2)
+		waitpid(forks[i], stat, 0);
+		if (i == j)
 		{
-			if (tmp2->heredoc == 1)
-				unlink(tmp2->infile);
-			tmp2 = tmp2->next;
+			free(g_error[0]);
+			g_error[0] = d_itoa(WEXITSTATUS(stat[0]));
 		}
-		if (tmp2)
-		{
-			close(tmp2->pipe[0]);
-			close(tmp2->pipe[1]);
-		}
-		waitpid(forks[i], NULL, 0);
 		i--;
 	}
+	ft_signal(SIGINT, ft_handle_signal);
+	ft_terminal(0);
 	return ;
 }

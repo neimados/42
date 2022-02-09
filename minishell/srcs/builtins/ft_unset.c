@@ -6,13 +6,13 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:02:16 by dso               #+#    #+#             */
-/*   Updated: 2022/02/05 14:26:06 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/08 12:20:34 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	**d_replace_env(int found)
+static char	**d_replace_env(int found, t_minishell *mshell)
 {
 	int		i;
 	int		j;
@@ -20,54 +20,53 @@ static char	**d_replace_env(int found)
 
 	i = 0;
 	j = 0;
-	new = malloc(sizeof(char *) * (d_count_tab(g_mini_env) + 1));
+	new = malloc(sizeof(char *) * (d_count_tab(mshell->g_mini_env) + 1));
 	if (!new)
 		return (NULL);
-	while (g_mini_env[i])
+	while (mshell->g_mini_env[i])
 	{
 		if (i != found)
 		{
-			new[j] = d_strdup(g_mini_env[i]);
+			new[j] = d_strdup(mshell->g_mini_env[i]);
 			j++;
 		}
 		i++;
 	}
 	new[j] = 0;
-	d_free_tab(g_mini_env);
+	d_free_tab(mshell->g_mini_env);
 	return (new);
 }
 
-static int	d_find_line(char *tmp)
+static int	d_find_line(char *tmp, t_minishell *mshell)
 {
 	int		i;
 	int		j;
 	char	*line;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	(void)tmp;
-	while (g_mini_env[i])
+	while (mshell->g_mini_env[++i])
 	{
-		while (g_mini_env[i][j] && g_mini_env[i][j] != '=')
+		while (mshell->g_mini_env[i][j] && mshell->g_mini_env[i][j] != '=')
 			j++;
-		line = d_substr(g_mini_env[i], 0, j);
+		line = d_substr(mshell->g_mini_env[i], 0, j);
 		if (d_strncmp(line, tmp, d_strlen(tmp)) == 0)
 		{
 			j = i;
-			g_mini_env = d_replace_env(i);
-			if (!g_mini_env)
+			mshell->g_mini_env = d_replace_env(i, mshell);
+			if (!mshell->g_mini_env)
 				return (1);
 			free(line);
 			return (0);
 		}
-		i++;
 		j = 0;
 		free(line);
 	}
 	return (0);
 }
 
-static int	d_put_unset(int count, char *cmd)
+static int	d_put_unset(int count, char *cmd, t_minishell *mshell)
 {
 	char	*tmp;
 	int		i;
@@ -88,13 +87,13 @@ static int	d_put_unset(int count, char *cmd)
 		i++;
 	}
 	i = 0;
-	if (d_find_line(tmp) == 1)
+	if (d_find_line(tmp, mshell) == 1)
 		return (1);
 	free(tmp);
 	return (0);
 }
 
-void	ft_unset(char **cmds)
+void	ft_unset(char **cmds, t_minishell *mshell)
 {
 	int	i;
 	int	j;
@@ -112,7 +111,7 @@ void	ft_unset(char **cmds)
 			j++;
 		}
 		if (count != 0)
-			if (d_put_unset(count, cmds[i]) == 1)
+			if (d_put_unset(count, cmds[i], mshell) == 1)
 				return ;
 		i++;
 		j = 0;

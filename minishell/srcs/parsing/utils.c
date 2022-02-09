@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 11:33:04 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 11:13:59 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/07 12:01:19 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,31 +106,4 @@ int	d_strncmp(const char *a, const char *b, size_t size)
 		i++;
 	}
 	return (diff);
-}
-
-char	*d_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*str;
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (len > d_strlen(s))
-		len = d_strlen(s);
-	str = d_calloc((len + 1), sizeof(char));
-	if (!str)
-		return (NULL);
-	if (d_strlen(s) < start)
-	{
-		*str = '\0';
-		return (str);
-	}
-	while (i < len && s[start + i])
-	{
-		str[i] = s[start + i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
 }

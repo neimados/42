@@ -6,53 +6,29 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/05 17:36:32 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 18:08:37 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static void	ft_signal(int keycode)
+void	ft_input(char **envp, t_minishell *mshell)
 {
-	if (keycode == SIGINT)
-	{
-		printf("\n");
-		// rl_on_new_line();
-		// rl_replace_line("", 0);
-		// rl_redisplay();
-		ft_input();
-	}
-	if (keycode == SIGQUIT)
-	{
-		printf("\b\b \b\b");
-		//rl_replace_line("", 0);
-	}
-}
+	char	*input;
 
-void	ft_input(void)
-{
-	char				*input;
-	struct sigaction	signals;
-	t_minishell			*mshell;
-	int					tmp;
-
-	signals.sa_handler = ft_signal;
-	sigaction(SIGINT, &signals, NULL);
-	sigaction(SIGQUIT, &signals, NULL);
-	mshell = malloc(sizeof(t_minishell));
-	if (!mshell)
-		exit(EXIT_FAILURE);
+	ft_cp_env(envp, mshell);
 	while (1)
 	{
-		tmp = errno;
+		ft_terminal(0);
 		input = readline("minishell$> ");
-		errno = tmp;
 		add_history(input);
 		if (input == NULL)
 		{
 			printf("\b\bexit\n");
-			//free
+			free(mshell->pwd);
+			d_free_tab(mshell->g_mini_env);
 			free(mshell);
+			d_free_tab(g_error);
 			exit(EXIT_SUCCESS);
 		}
 		if (ft_parsing(input, mshell) == 0)
@@ -80,18 +56,25 @@ void	ft_input(void)
 
 int	main (int argc, char **argv, char **envp)
 {
-	struct	sigaction signals;
+	t_minishell			*mshell;
 
+	mshell = malloc(sizeof(t_minishell));
+	if (!mshell)
+		exit(EXIT_FAILURE);
+	g_error = d_calloc(3, sizeof(char *));
+	if (!g_error)
+		exit(EXIT_FAILURE);
+	g_error[0] = d_strdup("0");
+	d_init_struct(mshell);
 	(void)argv;
 	if (argc != 1)
 	{
-		write (2, "No args allowed\n", 16);
+		d_putstr_fd("No args allowed\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	signals.sa_handler = ft_signal;
-	sigaction(SIGINT, &signals, NULL);//ctrl+C
-	sigaction(SIGQUIT, &signals, NULL);//ctrl+\'
-	ft_cp_env(envp);
-	ft_input();
+	ft_terminal(0);
+	ft_block_signal(SIGQUIT);
+	ft_signal(SIGINT, ft_handle_signal);
+	ft_input(envp, mshell);
 	return (0);
 }

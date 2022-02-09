@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:40:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/05 18:06:47 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 16:48:04 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,33 @@ static char	*d_check_path(char *variable, char *env)
 	return (value);
 }
 
-static char	*d_var_err(t_minishell *mshell)
+static char	*d_var_err(void)
 {
-	int		i;
-	int		err;
 	char	*var;
 
+	var = d_strdup(g_error[0]);
+	return (var);
+}
+
+static int	d_check_braces(char *tmp)
+{
+	int	i;
+	int	sign;
+
 	i = 0;
-	err = mshell->error;
-	while (err != 0)
+	sign = 0;
+	while (tmp[i])
 	{
-		err /= 10;
+		if (tmp[i] == '{')
+			sign++;
+		else if (tmp[i] == '}')
+			sign = 0;
 		i++;
 	}
-	var = d_calloc((i + 1), sizeof(char));
-	if (!var)
-		return (NULL);
-	var = d_itoa(mshell->error);
-	return (var);
+	if (sign == 0)
+		return (0);
+	d_putstr_fd("Error: Unclosed braces\n", 2);
+	return (1);
 }
 
 char	*d_check_vars(char *tmp, t_minishell *mshell)
@@ -66,16 +75,26 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 	char	*variable;
 	char	*value;
 	char	*carry;
+	int		braces;
 	
 	i = 0;
 	j = 0;
 	start = 0;
 	count = 0;
+	braces = 0;
 	str = d_calloc(1, sizeof(char));
 	while (tmp[i])
 	{
 		if (tmp[i] != '$')
 		{
+			if (braces != 0)
+			{
+				if (tmp[i] == '}')
+				{
+					i++;
+					braces = 0;
+				}
+			}
 			start = i;
 			if (tmp[i] == '\'')
 			{
@@ -98,29 +117,42 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 			i++;
 			if (tmp[i] >= '0' && tmp[i] <= '9')
 				i++;
-			else if (tmp[i] == '?')
+			else if (tmp[i] == '{')
 			{
-				value = d_var_err(mshell);
+				if (d_check_braces(tmp) == 1)
+					return (NULL);
+				i++;
+				braces++;
+			}
+			if (tmp[i] == '?')
+			{
+				value = d_var_err();
 				if (!value)
 					return (NULL);
 				str = d_strjoin(str, value);
-					free(value);
+				free(value);
 				i++;
 			}
 			else
 			{
 				start = i;
-				while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"')
-					i++;
+				if (braces != 0)
+					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != '}')
+						i++;
+				else
+					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"')
+						i++;
 				variable = d_substr(tmp, start, i - start);
-				while (g_mini_env[j])
+				while (mshell->g_mini_env[j])
 				{
-					if (variable[0] == g_mini_env[j][0])
+					if (variable[0] == mshell->g_mini_env[j][0])
 					{
-						value = d_check_path(variable, g_mini_env[j]);
+						value = d_check_path(variable, mshell->g_mini_env[j]);
 						if (value)
+						{
 							str = d_strjoin(str, value);
-						free(value);
+							free(value);
+						}
 					}
 					j++;
 				}

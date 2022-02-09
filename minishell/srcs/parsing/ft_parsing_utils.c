@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:13:17 by dso               #+#    #+#             */
-/*   Updated: 2022/02/02 18:10:11 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/09 10:22:05 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ int	d_check_end(char *input)
 			i--;
 		if (input[i] == '<' || input[i] == '>')
 		{
-			printf("syntax error near unexpected token 'newline'\n");
+			d_putstr_fd("syntax error near unexpected token 'newline'\n", 2);
 			return (1);
 		}
-		else if (input[i] == '|' || input[j] == '|')
+		else if (input[j] == '|' || (input[i] == '|' && i == j))
 		{
-			printf("syntax error near unexpected token '|'\n");
+			d_putstr_fd("syntax error near unexpected token '|'\n", 2);
 			return (1);
 		}
 	}
@@ -56,7 +56,7 @@ int	d_check_end(char *input)
 
 int	d_check_quotes(char *input, t_minishell *mshell)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (input[i])
@@ -69,7 +69,7 @@ int	d_check_quotes(char *input, t_minishell *mshell)
 	}
 	if (mshell->nb_sq % 2 != 0 || mshell->nb_dq % 2 != 0)
 	{
-		write (2, "Error: Unclosed quote\n", 22);
+		d_putstr_fd("Error: Unclosed quote\n", 2);
 		return (1);
 	}
 	return (0);
