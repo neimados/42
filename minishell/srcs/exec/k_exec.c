@@ -243,8 +243,8 @@ void	k_loop_forks(t_minishell *minishell)
 		ft_unset(tmp->cmd, minishell);
 		return ;
 	}
-	ft_signal(SIGINT, ft_handle_signal_child);
-	ft_terminal(1);
+	// ft_signal(SIGINT, ft_handle_signal_child);
+	// ft_terminal(1);
 	forks = malloc(sizeof(pid_t) * nbcmd);
 	i = 0;
 	while (i < nbcmd)
@@ -291,7 +291,7 @@ void	k_loop_forks(t_minishell *minishell)
 			unlink(tmp2->infile);
 		tmp2 = tmp2->next;
 	}
-	ft_signal(SIGINT, ft_handle_signal);
-	ft_terminal(0);
+	// ft_signal(SIGINT, ft_handle_signal);
+	// ft_terminal(0);
 	return ;
 }

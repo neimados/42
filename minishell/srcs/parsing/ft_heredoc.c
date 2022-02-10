@@ -63,55 +63,94 @@ static int	d_check_hd_quotes(char *hd_stop, char c)
 	return (sign);
 }
 
-static void	d_loop_heredoc(int fd, char *hd_stop, int length, t_minishell *mshell)
+static char	*d_trim_hdstop(char *hd_stop)
+{
+	int		i;
+	int		j;
+	int		count;
+	char	*str;
+
+	i = -1;
+	j = -1;
+	count = 0;
+	while (hd_stop[++i])
+		if (hd_stop[i] != '\'' && hd_stop[i] != '\"')
+			count++;
+	str = d_calloc((count + 1), sizeof(char));
+	if (!str)
+		return (NULL);
+	i = -1;
+	while (hd_stop[++i])
+		if (hd_stop[i] != '\'' && hd_stop[i] != '\"')
+			str[++j] = hd_stop[i];
+	return (str);
+}
+
+static int	d_loop_heredoc(int fd, char *hd_stop, t_minishell *mshell)
 {
 	char	*input;
 	int		quotes;
-	// char	*str;
+	char	*str;
+	char 	*stop;
 
-	input = NULL;
 	quotes = 0;
 	(void)mshell;
+	stop = d_trim_hdstop(hd_stop);
+	if (!stop)
+		return (1);
 	if (d_check_hd_quotes(hd_stop, '\'') == 1 || d_check_hd_quotes(hd_stop, '\"') == 1)
-		return ;
+		return (1);
 	else if (d_check_hd_quotes(hd_stop, '\'') != 0 || d_check_hd_quotes(hd_stop, '\"') != 0)
 		quotes++;
-	ft_signal(SIGINT, ft_handle_signal_spec);
 	//rl_getc_function = getc;
+	// ft_signal2(SIGINT);
 	while (1)
 	{
 		input = readline("> ");
-		if (d_strncmp(g_error[0], "1", 1) == 0)
-		{
-			close(fd);
-			return ;
-		}
+		// if (d_strncmp(g_error[0], "1", 1) == 0)
+		// {
+		// 	close(fd);
+		// 	ft_signal(SIGINT, ft_handle_signal);
+		// 	return (0);
+		// }
 		if (input == NULL)
 		{
-			close(fd);
-			return ;
+			free(stop);
+			return (0);
 		}
-		else if (d_strncmp(hd_stop, input, length) == 0)
-			return ;
-		// if (quotes != 0)
-		// 	str = d_check_vars(input, mshell);
-		write(fd, input, d_strlen(input));
+		else if (d_strncmp(stop, input, d_strlen(stop)) == 0)
+		{
+			free(stop);
+			return (0);
+		}
+		if (quotes == 0)
+		{
+			str = d_check_vars(input, mshell);
+			d_putstr_fd(str, fd);
+			free(str);
+		}
+		else
+			write(fd, input, d_strlen(input));
 		write(fd, "\n", 1);
 	}
 }
 
-void	d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell)
+int	d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell)
 {
-	int		length;
 	int		fd;
 
 	fd = open(heredoc, O_WRONLY | O_TRUNC | O_CREAT, 0777);
 	if (fd == -1)
 	{
 		d_putstr_fd("Failed to open heredoc\n", 2);
-		return ;
+		return (1);
 	}
-	length = d_strlen(hd_stop);
-	d_loop_heredoc(fd, hd_stop, length, mshell);
+	if (d_loop_heredoc(fd, hd_stop, mshell) == 1)
+	{
+		d_putstr_fd("heredoc parsing failed\n", 2);
+		return (1);
+	}
+	ft_signal(SIGINT, ft_handle_signal);
 	close(fd);
+	return (0);
 }

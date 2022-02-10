@@ -19,7 +19,6 @@ void	ft_input(char **envp, t_minishell *mshell)
 	ft_cp_env(envp, mshell);
 	while (1)
 	{
-		ft_terminal(0);
 		input = readline("minishell$> ");
 		add_history(input);
 		if (input == NULL)
@@ -40,7 +39,8 @@ void	ft_input(char **envp, t_minishell *mshell)
 		test = mshell->cmds;
 		while (test != NULL)
 		{
-			d_free_tab(test->cmd);
+			if (test->cmd)
+				d_free_tab(test->cmd);
 			if (test->infile)
 				free(test->infile);
 			else if (test->outfile)

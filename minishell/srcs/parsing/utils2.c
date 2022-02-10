@@ -58,7 +58,7 @@ void	d_putstr_fd(char *s, int fd)
 void	ft_set_terminal(struct termios *terminal)
 {
 	terminal->c_iflag &= ~terminal->c_iflag;
-	terminal->c_iflag |= (ICRNL | IXON | IXANY | IMAXBEL | IUTF8);
+	terminal->c_iflag |= ( ICRNL | IXON | IXANY | IMAXBEL | IUTF8);
 	terminal->c_oflag &= ~terminal->c_oflag;
 	terminal->c_oflag |= (OPOST | ONLCR);
 	terminal->c_cflag &= ~terminal->c_cflag;
@@ -77,7 +77,12 @@ void	ft_terminal(int echo)
 		{
 			ft_set_terminal(&terminal);
 			if (echo == 1)
-				terminal.c_lflag |= (ECHOCTL);
+			{
+				terminal.c_lflag &= (ISIG | ICANON | IEXTEN | ECHO | FLUSHO);
+				terminal.c_cc[VEOF] = ' ';
+			}
+			else
+				terminal.c_cc[VEOF] = EOF;
 			if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal))
 			{
 				d_putstr_fd("Terminal error\n", 2);

@@ -52,6 +52,8 @@ void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp)
 	(void)s;
 	(void)keycode;
 	pid = d_split(g_error[1], ' ');
+	if (!pid)
+		return ;
 	i = 0;
 	while (pid[i])
 	{	
@@ -61,7 +63,7 @@ void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp)
 	d_free_tab(g_error);
 	g_error = d_calloc(3, sizeof(char *));
 	g_error[0] = d_strdup("130");
-	printf("\n");
+	printf("^C\n");
 }
 
 void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp)

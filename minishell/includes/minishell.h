@@ -89,7 +89,7 @@ int		d_check_end(char *input);
 int		d_count_cmds(char **args);
 void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
 char	*d_create_heredoc(int i);
-void	d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
+int		d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
 char	*d_check_vars(char *tmp, t_minishell *mshell);
 int		d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell);
 void	d_putstr_fd(char *s, int fd);
@@ -129,5 +129,6 @@ void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp);
 
 // CD TO FIX (Lien symbolique, .., leaks, unset PWD)
 // SIGNAL UNDER PIPE OR HEREDOC
-// heredoc var + gestion guillemets
+// heredoc ctrl d + ctrl c
 // sleep ctrl D + ctrl C 
+// signaux minishell inside minishell

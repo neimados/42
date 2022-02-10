@@ -66,7 +66,8 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 					else if (in == 2)
 					{
 						hd_stop = d_substr(args[i], start, j - start);
-						d_start_heredoc(hd_stop, heredoc, mshell);
+						if (d_start_heredoc(hd_stop, heredoc, mshell) == 1)
+							return (1);
 						if (end == 0)
 						{
 							cmd->heredoc = 1;
