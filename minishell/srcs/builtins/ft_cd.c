@@ -6,7 +6,7 @@
 /*   By: kmammeri <kmammeri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/04 17:01:34 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 15:48:49 by kmammeri         ###   ########.fr       */
+/*   Updated: 2022/02/09 20:00:36 by kmammeri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 	char	**oldsplit;
 
 	tmp = NULL;
+	old = NULL;
 	i = 0;
 	while (minishell->g_mini_env[i])
 		i++;
@@ -65,7 +66,7 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 		if (minishell->g_mini_env[i][0] == 'P' && minishell->g_mini_env[i][1] == 'W'
 		&& minishell->g_mini_env[i][2] == 'D' && minishell->g_mini_env[i][3] == '=')
 		{
-			old = ft_strjoin("OLD", minishell->pwd);
+			old = ft_strjoin("OLDPWD=", minishell->pwd);
 			j = i;
 		}
 		i++;
@@ -96,7 +97,7 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 			if (!ft_strncmp(minishell->g_mini_env[i], "HOME=", 5))
 			{
 				free(minishell->g_mini_env[j]);
-				tmp = d_substr(minishell->g_mini_env[i], 5, d_strlen(minishell->g_mini_env[i] + 5));
+				tmp = d_substr(old, 5, d_strlen(old + 5));
 				minishell->g_mini_env[j] = ft_strjoin("PWD=", tmp);
 				minishell->pwd = ft_strjoin("PWD=", tmp);
 				free(tmp);
@@ -106,18 +107,26 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 	}
 	else if (!d_strncmp(cmds[1], "..", d_strlen(cmds[1])))
 	{
-		free(minishell->g_mini_env[j]);
-		tmp = d_substr(old, 3, d_strlen(old + 3) - d_strlen(ft_strrchr(old, '/')));
-		minishell->g_mini_env[j] = ft_strjoin(tmp, "\0");
-		minishell->pwd = ft_strjoin(tmp, "\0");
-		if (!d_strncmp("PWD=", minishell->pwd, d_strlen(minishell->pwd)))
+		if (j != 0)
+			free(minishell->g_mini_env[j]);
+		if (old)
+		{
+			tmp = d_substr(old, 3, d_strlen(old + 3) - d_strlen(ft_strrchr(old, '/')));
+			minishell->g_mini_env[j] = ft_strjoin(tmp, "\0");
+			free(tmp);
+		}
+		tmp = d_substr(minishell->pwd, 0, d_strlen(minishell->pwd) - d_strlen(ft_strrchr(minishell->pwd, '/')));
+		if (tmp[0] == '\0')
+			minishell->pwd = d_strjoin(tmp, "/\0");
+		else
+			minishell->pwd = d_strjoin(tmp, "\0");
+		if (!d_strncmp("/", minishell->pwd, d_strlen(minishell->pwd)))
 		{
 			free(minishell->pwd);
 			free(minishell->g_mini_env[j]);
-			minishell->pwd = ft_strdup("PWD=/");
+			minishell->pwd = ft_strdup("/");
 			minishell->g_mini_env[j] = ft_strdup("PWD=/");
 		}
-		free(tmp);
 		tmp = NULL;
 	}
 	else if (!d_strncmp(cmds[1], "-", d_strlen(cmds[1])))
@@ -131,7 +140,7 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 				tmp = d_substr(minishell->g_mini_env[i], 7, d_strlen(minishell->g_mini_env[i] + 7));
 				minishell->g_mini_env[j] = ft_strjoin("PWD=", tmp);
 				free(minishell->pwd);
-				minishell->pwd = ft_strjoin("PWD=", tmp);
+				minishell->pwd = ft_strjoin(tmp, "\0");
 				free (tmp);
 			}
 			i++;
@@ -146,38 +155,46 @@ void	ft_cd(char **cmds, t_minishell *minishell)
 	else
 	{
 		free(minishell->g_mini_env[j]);
-		if (!d_strncmp("PWD=/", minishell->pwd, d_strlen(minishell->pwd)))
-			tmp = ft_strdup(old + 3);
+		if (!d_strncmp("/", minishell->pwd, d_strlen(minishell->pwd)))
+			tmp = ft_strdup(minishell->pwd);
 		else
-			tmp = ft_strjoin(old + 3, "/");
-		minishell->g_mini_env[j] = ft_strjoin(tmp, cmds[1]);
+			tmp = ft_strjoin(minishell->pwd, "/");
 		minishell->pwd = ft_strjoin(tmp, cmds[1]);
+		if (old)
+		{
+			minishell->g_mini_env[j] = ft_strjoin("PWD=", tmp);
+			free (tmp);
+			tmp = ft_strjoin(minishell->g_mini_env[j], cmds[1]);
+			free(minishell->g_mini_env[j]);
+			minishell->g_mini_env[j] = tmp;
+		}
 		free(tmp);
 	}
 	i = 0;
 	j = 0;
-	while (minishell->g_mini_env[i])
+	dprintf(2, "old == %s\n", old);
+	while (minishell->g_mini_env[i] && old)
 	{
-		if (!ft_strncmp(minishell->g_mini_env[i], "OLDPWD=", 7))
+		if (!d_strncmp(minishell->g_mini_env[i], "OLDPWD=", 7))
 		{
 			free(minishell->g_mini_env[i]);
-			if (old)
-				minishell->g_mini_env[i] = old;
-			else
-				minishell->g_mini_env[i] = d_strdup("OLDPWD=/");
+			minishell->g_mini_env[i] = ft_strjoin("OLDPWD=", minishell->pwd);
 			j = 1;
 		}
 		i++;
 	}
 	if (j == 0)
 	{
-		oldjoin = ft_strjoin("export ", old);
+		if (old)
+			oldjoin = ft_strjoin("export ", old);
+		else
+			oldjoin = ft_strjoin("export ", "OLDPWD=");
 		oldsplit = ft_split(oldjoin, ' ');
 		ft_export(oldsplit, minishell);
 		d_free_tab(oldsplit);
 		free(oldjoin);
 	}
-	if (cmds[1] && chdir(cmds[1]) == -1 && !d_strncmp(cmds[1], "-", d_strlen(cmds[1])) && !d_strncmp(cmds[1], "--", d_strlen(cmds[1])))
+	if (cmds[1] && chdir(cmds[1]) == -1 && !d_strncmp(cmds[1], "-", d_strlen(cmds[1])) & !d_strncmp(cmds[1], "--", d_strlen(cmds[1])))
 	{
 		i = 0;
 		minishell->pwd = old;

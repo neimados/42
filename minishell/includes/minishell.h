@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 17:50:09 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 16:51:09 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		d_check_end(char *input);
 int		d_count_cmds(char **args);
 void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
 char	*d_create_heredoc(int i);
-void	d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
+int		d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
 char	*d_check_vars(char *tmp, t_minishell *mshell);
 int		d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell);
 void	d_putstr_fd(char *s, int fd);
@@ -124,10 +124,13 @@ void	ft_terminal(int	echo);
 void	ft_set_terminal(struct termios *terminal);
 void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp);
 void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp);
+void	sigint_handler(int keycode);
+void	sigint_handler_child(int keycode);
 
 #endif
 
 // CD TO FIX (Lien symbolique, .., leaks, unset PWD)
 // SIGNAL UNDER PIPE OR HEREDOC
-// heredoc var + gestion guillemets
-// sleep ctrl D + ctrl C 
+// sleep ctrl D + ctrl C  + signal 87
+// signaux minishell inside minishell
+// kill fonctionne pas

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 18:46:05 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 16:31:11 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	d_open_pipe(t_minishell *mshell, int heredoc_num)
 	input = readline("> ");
 	if (input == NULL)
 	{
+		mshell->open_pipe = 0;
 		d_putstr_fd("syntax error: unexpected end of file\n", 2);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:40:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 16:48:04 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 10:40:00 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,10 +137,10 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 			{
 				start = i;
 				if (braces != 0)
-					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != '}')
+					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != '}' && tmp[i] != ' ')
 						i++;
 				else
-					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"')
+					while (tmp[i] && tmp[i] != '\'' && tmp[i] != '\"' && tmp[i] != ' ')
 						i++;
 				variable = d_substr(tmp, start, i - start);
 				while (mshell->g_mini_env[j])
@@ -156,10 +156,10 @@ char	*d_check_vars(char *tmp, t_minishell *mshell)
 					}
 					j++;
 				}
+				j = 0;
 				free(variable);
 			}
 		}
 	}
-	i = 0;
 	return (str);
 }

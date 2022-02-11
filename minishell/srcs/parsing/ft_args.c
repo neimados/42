@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 18:19:19 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 10:23:19 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 					else if (in == 2)
 					{
 						hd_stop = d_substr(args[i], start, j - start);
-						d_start_heredoc(hd_stop, heredoc, mshell);
+						if (d_start_heredoc(hd_stop, heredoc, mshell) == 1)
+							return (1);
 						if (end == 0)
 						{
 							cmd->heredoc = 1;

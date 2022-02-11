@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/09 18:47:36 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 18:14:54 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	k_child(t_minishell *minishell, int i)
 	int		fd_in;
 	int		fd_out;
 
+	
 	tmp = minishell->cmds;
 	if (i == 0)
 	{
@@ -243,7 +244,7 @@ void	k_loop_forks(t_minishell *minishell)
 		ft_unset(tmp->cmd, minishell);
 		return ;
 	}
-	ft_signal(SIGINT, ft_handle_signal_child);
+	ft_block_signal(SIGINT);
 	ft_terminal(1);
 	forks = malloc(sizeof(pid_t) * nbcmd);
 	i = 0;
@@ -254,6 +255,7 @@ void	k_loop_forks(t_minishell *minishell)
 		forks[i] = fork();
 		if (forks[i] == 0)
 		{
+			ft_signal(SIGINT, NULL);
 			if (tmp->next && !tmp->next->next)
 				close(tmp->next->pipe[0]);
 			k_child(minishell, i);

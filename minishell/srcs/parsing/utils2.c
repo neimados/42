@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 12:01:29 by dso               #+#    #+#             */
-/*   Updated: 2022/02/08 13:01:54 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/11 18:16:09 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,13 @@ void	ft_terminal(int echo)
 		{
 			ft_set_terminal(&terminal);
 			if (echo == 1)
-				terminal.c_lflag |= (ECHOCTL);
+			{
+				terminal.c_lflag &= (ISIG | ICANON | IEXTEN | ECHO | ECHOCTL | FLUSHO);
+				// terminal.c_lflag |= (ECHOCTL);
+				terminal.c_cc[VEOF] = ' ';
+			}
+			else
+				terminal.c_cc[VEOF] = EOF;
 			if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal))
 			{
 				d_putstr_fd("Terminal error\n", 2);
