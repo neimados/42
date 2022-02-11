@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 10:32:39 by dso               #+#    #+#             */
-/*   Updated: 2021/12/17 15:45:44 by dso              ###   ########.fr       */
+/*   Updated: 2022/01/24 13:35:14 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,9 @@ void	ft_pipex(char **argv, char **envp)
 		if (child_process(end, argv, envp) == 1)
 			ft_error();
 	}
-	if (argv[3][0] == 'l' && argv[3][1] == 's')
-		waitpid(fork1, NULL, 0);
+	// if (argv[3][0] == 'l' && argv[3][1] == 's')
+	// 	waitpid(fork1, NULL, 0);
+	
 	if (parent_process(end, argv, envp) == 1)
 	{
 		waitpid(fork1, NULL, 0);
