@@ -6,13 +6,14 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 16:51:09 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 16:26:42 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+# define BUFFER_SIZE 1
 
 # include <stdlib.h>
 # include <stdio.h>
@@ -96,6 +97,9 @@ void	d_putstr_fd(char *s, int fd);
 void	d_putchar_fd(char c, int fd);
 void	d_check_countwords(char c, int *i);
 char	*d_strchr(const char *str, int c);
+char	*get_next_line(int fd);
+char	*d_strchr2(const char *str, int c);
+char	*d_strjoin2(char *s1, char *s2);
 
 // exec
 void	k_loop_forks(t_minishell *minishell);
@@ -126,11 +130,11 @@ void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp);
 void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp);
 void	sigint_handler(int keycode);
 void	sigint_handler_child(int keycode);
+void	sigint_handler_spec(int keycode);
+void	sigint_handler_minishell(int keycode);
+void	ft_handle_signal_minishell(int keycode, siginfo_t *s, void *tmp);
+void	sigint_handler_hd(int keycode);
 
 #endif
 
 // CD TO FIX (Lien symbolique, .., leaks, unset PWD)
-// SIGNAL UNDER PIPE OR HEREDOC
-// sleep ctrl D + ctrl C  + signal 87
-// signaux minishell inside minishell
-// kill fonctionne pas

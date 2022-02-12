@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/11 18:14:54 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 14:38:36 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,8 +244,21 @@ void	k_loop_forks(t_minishell *minishell)
 		ft_unset(tmp->cmd, minishell);
 		return ;
 	}
-	ft_block_signal(SIGINT);
-	ft_terminal(1);
+	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "cat", i))
+	{
+		ft_terminal(2);
+		signal(SIGINT, sigint_handler_spec);
+	}
+	else if (nbcmd == 1 && !d_strncmp(tmp->cmd[0], "./minishell", i))
+	{
+		ft_terminal(0);
+		signal(SIGINT, sigint_handler_minishell);
+	}
+	else
+	{
+		ft_terminal(1);
+		signal(SIGINT, sigint_handler_child);
+	}
 	forks = malloc(sizeof(pid_t) * nbcmd);
 	i = 0;
 	while (i < nbcmd)
@@ -255,7 +268,6 @@ void	k_loop_forks(t_minishell *minishell)
 		forks[i] = fork();
 		if (forks[i] == 0)
 		{
-			ft_signal(SIGINT, NULL);
 			if (tmp->next && !tmp->next->next)
 				close(tmp->next->pipe[0]);
 			k_child(minishell, i);
@@ -281,8 +293,11 @@ void	k_loop_forks(t_minishell *minishell)
 		waitpid(forks[i], stat, 0);
 		if (i == j)
 		{
-			free(g_error[0]);
-			g_error[0] = d_itoa(WEXITSTATUS(stat[0]));
+			if (d_strncmp(g_error[0], "130", 3) != 0)
+			{
+				free(g_error[0]);
+				g_error[0] = d_itoa(WEXITSTATUS(stat[0]));
+			}
 		}
 		i--;
 	}
@@ -293,7 +308,8 @@ void	k_loop_forks(t_minishell *minishell)
 			unlink(tmp2->infile);
 		tmp2 = tmp2->next;
 	}
-	ft_signal(SIGINT, ft_handle_signal);
+	signal(SIGINT, sigint_handler);
 	ft_terminal(0);
+	// ft_signal(SIGINT, ft_handle_signal);
 	return ;
 }

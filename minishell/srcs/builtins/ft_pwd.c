@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/07 17:40:39 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 10:17:41 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,7 @@
 
 void	ft_pwd(char **cmds, t_minishell *mshell)
 {
-	int	i;
-
-	i = 0;
-	if (cmds[1])
-	{
-		printf("pwd: too many arguments\n");
-		exit(EXIT_FAILURE);
-	}
+	(void)cmds;
 	printf("%s\n", mshell->pwd);
 	exit(EXIT_SUCCESS);
 }

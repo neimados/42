@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 10:23:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 18:22:55 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 15:24:51 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,13 @@ void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp)
 
 	(void)tmp;
 	(void)s;
-	(void)keycode;
-	d_putstr_fd("TEST", 2);
+	if (keycode == SIGINT)
+	{
+		printf("^C\n");
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("1");
+	}
 	// pid = d_split(g_error[1], ' ');
 	// if (!pid)
 	// 	return ;
@@ -92,11 +97,25 @@ void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp)
 {
 	(void)tmp;
 	(void)s;
-	(void)keycode;
-	d_free_tab(g_error);
-	g_error = d_calloc(3, sizeof(char *));
-	g_error[0] = d_strdup("1");
-	exit(0);
+	if (keycode == SIGINT)
+	{
+		printf("\n");
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("1");
+	}
+}
+
+void	ft_handle_signal_minishell(int keycode, siginfo_t *s, void *tmp)
+{
+	(void)tmp;
+	(void)s;
+	if (keycode == SIGINT)
+	{
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		g_error[0] = d_strdup("1");
+	}
 }
 
 void	ft_handle_signal(int keycode, siginfo_t *s, void *tmp)
@@ -126,6 +145,8 @@ void sigint_handler(int keycode)
 		rl_redisplay();
 		d_free_tab(g_error);
 		g_error = d_calloc(3, sizeof(char *));
+		if (!g_error)
+			return ;
 		g_error[0] = d_strdup("1");
 	}
 }
@@ -133,11 +154,94 @@ void sigint_handler(int keycode)
 void	sigint_handler_child(int keycode)
 {
 	if (keycode == SIGINT)
+		printf("^C\n");
+	g_error = d_calloc(3, sizeof(char *));
+	if (!g_error)
+		return ;
+	g_error[0] = d_strdup("130");
+}
+
+void	sigint_handler_spec(int keycode)
+{
+	if (keycode == SIGINT)
 	{
-		printf("");
+		printf("\n");
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		if (!g_error)
+			return ;
+		g_error[0] = d_strdup("1");
+	}
+}
+
+void	sigint_handler_minishell(int keycode)
+{
+	if (keycode == SIGINT)
+	{
+		d_free_tab(g_error);
+		g_error = d_calloc(3, sizeof(char *));
+		if (!g_error)
+			return ;
+		g_error[0] = d_strdup("1");
+	}
+}
+
+void	sigint_handler_hd(int keycode)
+{
+	if (keycode == SIGINT)
+	{
+		printf("\n");
 		d_free_tab(g_error);
 		g_error = d_calloc(3, sizeof(char *));
 		g_error[0] = d_strdup("1");
 	}
-	exit(SIGINT);
+	exit(1);
+}
+
+void	ft_set_terminal(struct termios *terminal)
+{
+	terminal->c_iflag &= ~terminal->c_iflag;
+	terminal->c_iflag |= (ICRNL | IXON | IXANY | IMAXBEL | IUTF8);
+	terminal->c_oflag &= ~terminal->c_oflag;
+	terminal->c_oflag |= (OPOST | ONLCR);
+	terminal->c_cflag &= ~terminal->c_cflag;
+	terminal->c_cflag |= (CREAD | CS8);
+	terminal->c_lflag &= ~terminal->c_lflag;
+	terminal->c_lflag |= (ISIG | ICANON | IEXTEN | ECHO | NOFLSH);
+}
+
+void	ft_terminal(int echo)
+{
+	struct termios	terminal;
+
+	if (isatty(STDIN_FILENO) == 1)
+	{
+		if (tcgetattr(STDIN_FILENO, &terminal) == 0)
+		{
+			ft_set_terminal(&terminal);
+			if (echo == 1)
+			{
+				terminal.c_lflag &= (ISIG | ICANON | IEXTEN | ECHO | ECHOCTL | FLUSHO);
+				//terminal.c_lflag |= (ECHOCTL);
+				terminal.c_cc[VEOF] = ' ';
+			}
+			else if (echo == 2)
+				terminal.c_lflag |= (ECHOCTL);
+			else
+			{
+				terminal.c_cc[VINTR] = 3;
+				terminal.c_cc[VEOF] = 4;
+			}
+			if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal))
+			{
+				d_putstr_fd("Terminal error\n", 2);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			d_putstr_fd("Terminal error\n", 2);
+			exit(EXIT_FAILURE);
+		}
+	}
 }

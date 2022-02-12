@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 16:54:25 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 15:21:27 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_input(char **envp, t_minishell *mshell)
 	ft_cp_env(envp, mshell);
 	while (1)
 	{
-		input = readline("minishell$> ");
+		input = readline("\x1b[34m""minishell$> ""\x1b[34m");
 		add_history(input);
 		if (input == NULL)
 		{
@@ -72,10 +72,10 @@ int	main (int argc, char **argv, char **envp)
 		exit(EXIT_FAILURE);
 	}
 	ft_terminal(0);
-	ft_block_signal(SIGQUIT);
-	ft_signal(SIGINT, ft_handle_signal);
-	// signal(SIGINT, sigint_handler);
-	// signal(SIGQUIT, SIG_IGN);
+	// ft_block_signal(SIGQUIT);
+	// ft_signal(SIGINT, ft_handle_signal);
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	ft_input(envp, mshell);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 10:57:09 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 16:31:11 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 16:17:56 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,52 @@ int	d_open_pipe(t_minishell *mshell, int heredoc_num)
 	t_cmds	*cmd;
 	char	*heredoc;
 	char	*input;
+	pid_t	fork_pipe;
+	char	*fork_id;
+	int		fd;
+	int		status[1];
 
 	i = 0;
-	input = readline("> ");
-	if (input == NULL)
+	mshell->nb_sq = 0;
+	mshell->nb_dq = 0;
+	fork_pipe = fork();
+	if (fork_pipe == -1)
+		return (1);
+	fork_id = d_itoa(fork_pipe);
+	g_error[1] = d_strjoin(g_error[1], fork_id);
+	free(fork_id);
+	signal(SIGINT, sigint_handler_minishell);
+	if (fork_pipe == 0)
+	{
+		signal(SIGINT, sigint_handler_hd);
+		fd = open("/private/tmp/tmp_pipe", O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		if (fd == -1)
+			exit(EXIT_FAILURE);
+		input = readline("> ");
+		if (input == NULL)
+		{
+			close(fd);
+			free(input);
+			d_putstr_fd("syntax error: unexpected end of file\n", 2);
+			exit(EXIT_FAILURE);
+		}
+		write(fd, input, d_strlen(input));
+		close(fd);
+		free(input);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(fork_pipe, status, 0);
+	if (WEXITSTATUS(status[0])== 1)
 	{
 		mshell->open_pipe = 0;
-		d_putstr_fd("syntax error: unexpected end of file\n", 2);
 		return (1);
 	}
+	fd = open("/private/tmp/tmp_pipe", O_RDONLY);
+	if (fd == -1)
+		return (1);
+	input = get_next_line(fd);
+	close(fd);
+	unlink("/private/tmp/tmp_pipe");
 	if (d_check_end(input) == 1)
 		return (1);
 	if (d_check_quotes(input, mshell) == 1)
@@ -59,6 +96,7 @@ int	d_open_pipe(t_minishell *mshell, int heredoc_num)
 	tmp = d_split(input, '|');
 	if (!tmp)
 		return (1);
+	i = 0;
 	while (tmp[i])
 	{
 		cmd = d_init_cmds();
@@ -91,6 +129,7 @@ int	d_open_pipe(t_minishell *mshell, int heredoc_num)
 		d_check_pipe(input, mshell);
 	}
 	d_free_tab(tmp);
+	free(input);
 	return (0);
 }
 
