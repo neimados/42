@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:12:31 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 17:22:49 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/12 16:32:43 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,20 @@ static void	d_loop_free_exit(t_minishell *mshell)
 	}
 }
 
+static void	d_exit_free(t_minishell *mshell)
+{
+	d_loop_free_exit(mshell);
+	printf("\b\bexit\n");
+	free(mshell->pwd);
+	d_free_tab(mshell->g_mini_env);
+	free(mshell);
+	d_free_tab(g_error);
+}
+
 void	ft_exit(t_minishell *mshell, char **cmds)
 {
 	unsigned char	error;
-	
+
 	error = d_atoi(g_error[0]);
 	if (cmds[1])
 	{
@@ -64,14 +74,9 @@ void	ft_exit(t_minishell *mshell, char **cmds)
 		}
 		error = d_atoi(cmds[1]);
 		if (error)
-		while (error > 255)
-			error = error - 256;
+			while (error > 255)
+				error = error - 256;
 	}
-	d_loop_free_exit(mshell);
-	printf("\b\bexit\n");
-	free(mshell->pwd);
-	d_free_tab(mshell->g_mini_env);
-	free(mshell);
-	d_free_tab(g_error);
+	d_exit_free(mshell);
 	exit(error);
 }

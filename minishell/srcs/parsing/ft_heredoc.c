@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:38:58 by dso               #+#    #+#             */
-/*   Updated: 2022/02/12 15:14:28 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 17:54:13 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,28 +93,21 @@ static int	d_loop_heredoc(int fd, char *hd_stop, t_minishell *mshell)
 	char	*str;
 	char 	*stop;
 	pid_t	fork_hd;
-	char	*fork_id;
+	int		status[1];
 
 	quotes = 0;
 	(void)mshell;
 	stop = d_trim_hdstop(hd_stop);
 	if (!stop)
 		return (1);
+	free(hd_stop);
 	if (d_check_hd_quotes(hd_stop, '\'') == 1 || d_check_hd_quotes(hd_stop, '\"') == 1)
 		return (1);
 	else if (d_check_hd_quotes(hd_stop, '\'') != 0 || d_check_hd_quotes(hd_stop, '\"') != 0)
 		quotes++;
-	//rl_getc_function = getc;
 	fork_hd = fork();
 	if (fork_hd == -1)
 		return (1);
-	fork_id = d_itoa(fork_hd);
-	g_error[1] = d_strjoin(g_error[1], fork_id);
-	free(fork_id);
-	g_error = d_calloc(3, sizeof(char *));
-	if (!g_error)
-		return (1);
-	g_error[0] = d_strdup("0");
 	signal(SIGINT, sigint_handler_minishell);
 	if (fork_hd == 0)
 	{
@@ -123,13 +116,10 @@ static int	d_loop_heredoc(int fd, char *hd_stop, t_minishell *mshell)
 		{
 			input = readline("> ");
 			if (input == NULL)
-			{
-				free(stop);
 				exit(1);
-			}
 			else if (d_strncmp(stop, input, d_strlen(stop)) == 0)
 			{
-				free(stop);
+				free(input);
 				exit(0);
 			}
 			if (quotes == 0)
@@ -141,9 +131,14 @@ static int	d_loop_heredoc(int fd, char *hd_stop, t_minishell *mshell)
 			else
 				write(fd, input, d_strlen(input));
 			write(fd, "\n", 1);
+			free(input);
 		}
+		close(fd);
 	}
-	waitpid(fork_hd, NULL, 0);
+	waitpid(fork_hd, status, 0);
+	free(stop);
+	if (WEXITSTATUS(status[0]) != 0)
+		return (1);
 	if ((d_strncmp(g_error[0], "1", d_strlen(g_error[0])) == 0))
 		return (1);
 	return (0);
@@ -160,7 +155,10 @@ int	d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell)
 		return (1);
 	}
 	if (d_loop_heredoc(fd, hd_stop, mshell) == 1)
+	{
+		close(fd);
 		return (1);
+	}
 	close(fd);
 	signal(SIGINT, sigint_handler);
 	ft_terminal(0);

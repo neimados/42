@@ -6,17 +6,16 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/12 14:38:36 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 18:26:38 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+// #include <string.h>
 
 void	ft_error(char *str1, char *str2)
 {
 	write(2, "minishell: ", 11);
-	if (str1)
-		write(2, ": ", 2);
 	write(2, str1, ft_strlen(str1));
 	if (str2)
 		write(2, ": ", 2);
@@ -34,35 +33,43 @@ void	k_exec_cmd(char **cmd, t_minishell *minishell)
 	char	**path;
 
 	i = 0;
+	path = NULL;
 	if (access(cmd[i], X_OK) == 0)
 		execve(cmd[i], cmd, minishell->g_mini_env);
 	while (minishell->g_mini_env[i] && (minishell->g_mini_env[i][0] != 'P' || minishell->g_mini_env[i][1] != 'A'
 	|| minishell->g_mini_env[i][2] != 'T' || minishell->g_mini_env[i][3] != 'H'))
 		i++;
-	path = ft_split(minishell->g_mini_env[i] + 5, ':');
+	if (minishell->g_mini_env[i])
+		path = ft_split(minishell->g_mini_env[i] + 5, ':');
+	else
+		ft_error(cmd[0], "No such file or directory");
 	i = 0;
-	while (path[i])
+	while (path && path[i])
 	{
 		path[i] = ft_strjoin(path[i], "/");
 		path[i] = ft_strjoin(path[i], cmd[0]);
 		i++;
 	}
 	i = -1;
-	while (path[++i])
+	while (path && path[++i])
 	{
 		if (access(path[i], X_OK) == 0)
 			execve(path[i], cmd, minishell->g_mini_env);
 	}
-	free(path[0]);
+	if (path)
+		free(path[0]);
 	g_error[0] = "127";
-	ft_error("Command not found", cmd[0]);
+	i = 0;
+	ft_error(cmd[0], "command not found");
 }
 
 void	k_exec_builtins(char **cmd, t_minishell *minishell)
 {
 	int	len;
+	int	i;
 
 	len = d_strlen(cmd[0]);
+	i = 0;
 	if (!d_strncmp(cmd[0], "echo", len))
 		ft_echo(cmd);
 	else if (!d_strncmp(cmd[0], "cd", len))
@@ -74,7 +81,15 @@ void	k_exec_builtins(char **cmd, t_minishell *minishell)
 	else if (!d_strncmp(cmd[0], "unset", len))
 		ft_exit(minishell, cmd);
 	else if (!d_strncmp(cmd[0], "env", len))
-		ft_env(cmd, minishell);
+	{
+		while (minishell->g_mini_env[i] && (minishell->g_mini_env[i][0] != 'P' || minishell->g_mini_env[i][1] != 'A'
+		|| minishell->g_mini_env[i][2] != 'T' || minishell->g_mini_env[i][3] != 'H'))
+		i++;
+		if (minishell->g_mini_env[i])
+			ft_env(cmd, minishell);
+		else
+			ft_error(cmd[0], "No such file or directory");
+	}
 	else if (!d_strncmp(cmd[0], "exit", len))
 		ft_exit(minishell, cmd);
 }
@@ -308,6 +323,7 @@ void	k_loop_forks(t_minishell *minishell)
 			unlink(tmp2->infile);
 		tmp2 = tmp2->next;
 	}
+	free(forks);
 	signal(SIGINT, sigint_handler);
 	ft_terminal(0);
 	// ft_signal(SIGINT, ft_handle_signal);

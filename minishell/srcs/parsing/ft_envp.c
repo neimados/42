@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 11:54:24 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 16:39:32 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 18:10:19 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ static int	ft_search_oldpwd(char **envp)
 
 static void	d_search_pwd(t_minishell *mshell)
 {
-	int	i;
+	int		i;
 	char	*buffer;
-	
+
 	i = 1;
 	buffer = d_calloc(i, sizeof(char));
+	if (!buffer)
+		return ;
 	while (buffer == NULL || buffer[0] == '\0')
 	{
 		free(buffer);

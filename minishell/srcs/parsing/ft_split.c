@@ -6,26 +6,11 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 11:51:50 by dso               #+#    #+#             */
-/*   Updated: 2022/02/09 17:03:39 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 18:32:14 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	freemalloc(char **strs)
-{
-	int	i;
-
-	i = 0;
-	while (strs[i])
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-	strs = NULL;
-	return ;
-}
 
 static int	ft_countwords(char const *str, char c)
 {
@@ -42,38 +27,18 @@ static int	ft_countwords(char const *str, char c)
 		else
 		{
 			count++;
-			while (str[i] != c && str[i])
-			{
-				if (str[i] == '\'')
-				{
-					i++;
-					while (str[i] && str[i] != '\'')
-						i++;
-					i++;
-				}
-				else if (str[i] == '\"')
-				{
-					i++;
-					while (str[i] && str[i] != '\"')
-						i++;
-					i++;
-				}
-				else
-					i++;
-			}
+			i = d_loop_countwords(str, c, i);
 		}
 	}
 	return (count);
 }
 
-static void	ft_malloctab(char const *str, char c, char **strs)
+static void	ft_malloctab(char const *str, char c, char **strs, int i)
 {	
-	int	i;
 	int	j;
 	int	count;
 
-	i = 0;
-	j = 0;
+	j = -1;
 	count = 0;
 	while (str[i])
 	{
@@ -84,50 +49,32 @@ static void	ft_malloctab(char const *str, char c, char **strs)
 		{
 			while (str[i] != c && str[i])
 			{
-				if (str[i] == '\'')
-				{
-					i++;
-					count++;
-					while (str[i] && str[i] != '\'')
-					{
-						i++;
-						count++;
-					}
-					i++;
-					count++;
-				}
-				else if (str[i] == '\"')
-				{
-					i++;
-					count++;
-					while (str[i] && str[i] != '\"')
-					{
-						i++;
-						count++;
-					}
-					i++;
-					count++;
-				}
+				if (str[i] == '\'' || str[i] == '\"')
+					i = d_loop_malloctab(i, str);
 				else
-				{
 					i++;
-					count++;
-				}
 			}
-			strs[j] = d_calloc((count + 1), sizeof(char));
+			count = i - count;
+			strs[++j] = d_calloc((count + 1), sizeof(char));
 			if (!strs[j])
 				return (freemalloc(strs));
-			j++;
-			count = 0;
 		}
 	}
 }
 
-static void	ft_filltab(char const *str, char c, char **strs, int words)
+static void	d_fill_filltab(t_parsing *p, int i, int j, int k)
 {
-	int	i;
-	int	j;
-	int	k;
+	p->i = i;
+	p->j = j;
+	p->k = k;
+}
+
+static void	ft_filltab(char const *str, char c, char **strs)
+{
+	int			i;
+	int			j;
+	int			k;
+	t_parsing	p;
 
 	i = 0;
 	j = 0;
@@ -141,26 +88,12 @@ static void	ft_filltab(char const *str, char c, char **strs, int words)
 		{
 			while (str[i] != c && str[i])
 			{
-				if (str[i] == '\'')
-				{
-					strs[j][k++] = str[i++];
-					while (str[i] && str[i] != '\'')
-						strs[j][k++] = str[i++];
-					strs[j][k++] = str[i++];
-				}
-				else if (str[i] == '\"')
-				{
-					strs[j][k++] = str[i++];
-					while (str[i] && str[i] != '\"')
-						strs[j][k++] = str[i++];
-					strs[j][k++] = str[i++];
-				}
-				else
-					strs[j][k++] = str[i++];
+				d_fill_filltab(&p, i, j, k);
+				k = d_loop_filltab(&p, str, strs);
+				i = d_skip_filltab(&p, str);
 			}
 			k = 0;
-			if (j < words)
-				j++;
+			j++;
 		}
 	}
 }
@@ -169,7 +102,9 @@ char	**d_split(char *s, char c)
 {
 	char	**strs;
 	int		words;
+	int		i;
 
+	i = 0;
 	if (!s)
 	{
 		d_putstr_fd("Split error 1\n", 2);
@@ -183,7 +118,7 @@ char	**d_split(char *s, char c)
 		return (NULL);
 	}
 	strs[words] = NULL;
-	ft_malloctab(s, c, strs);
-	ft_filltab(s, c, strs, words);
+	ft_malloctab(s, c, strs, i);
+	ft_filltab(s, c, strs);
 	return (strs);
 }

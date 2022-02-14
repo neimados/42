@@ -6,10 +6,9 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/12 16:26:42 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 17:03:42 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -72,6 +71,10 @@ void	ft_cp_env(char **envp, t_minishell *mshell);
 int		ft_parsing(char *input, t_minishell *mshell);
 char	**d_split(char *s, char c);
 void	freemalloc(char **strs);
+int		d_loop_countwords(char const *str, char c, int i);
+int		d_loop_malloctab(int i, char const *str);
+int		d_loop_filltab(t_parsing *p, char const *str, char **strs);
+int		d_skip_filltab(t_parsing *p, char const *str);
 char	*d_strdup(const char *str);
 size_t	d_strlen(const char *str);
 void	*d_calloc(size_t count, size_t size);
@@ -92,6 +95,10 @@ void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
 char	*d_create_heredoc(int i);
 int		d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
 char	*d_check_vars(char *tmp, t_minishell *mshell);
+char	*d_check_path(char *variable, char *env);
+char	*d_var_err(void);
+char	*d_loop_vars3(char *tmp, int i, t_minishell *mshell, char *str);
+int		d_skip_vars3(char *tmp, int i);
 int		d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell);
 void	d_putstr_fd(char *s, int fd);
 void	d_putchar_fd(char c, int fd);
@@ -121,18 +128,11 @@ void	ft_unset(char **cmds, t_minishell *mshell);
 void	k_error(char *str1, char *str2);
 
 //signals
-void	ft_block_signal(int keycode);
-void	ft_signal(int keycode, void (*f)(int, siginfo_t *, void *));
-void	ft_handle_signal(int keycode, siginfo_t *s, void *tmp);
 void	ft_terminal(int	echo);
-void	ft_set_terminal(struct termios *terminal);
-void	ft_handle_signal_child(int keycode, siginfo_t *s, void *tmp);
-void	ft_handle_signal_spec(int keycode, siginfo_t *s, void *tmp);
 void	sigint_handler(int keycode);
 void	sigint_handler_child(int keycode);
 void	sigint_handler_spec(int keycode);
 void	sigint_handler_minishell(int keycode);
-void	ft_handle_signal_minishell(int keycode, siginfo_t *s, void *tmp);
 void	sigint_handler_hd(int keycode);
 
 #endif

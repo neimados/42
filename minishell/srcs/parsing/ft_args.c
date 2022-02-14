@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/02 17:42:37 by dso               #+#    #+#             */
-/*   Updated: 2022/02/11 10:23:19 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 17:17:00 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 	char	*hd_stop;
 	int		end;
 	char	*tmp;
+	int		count;
 
 	i = 0;
 	j = 0;
@@ -31,7 +32,8 @@ int	d_put_args(char **args, t_cmds *cmd, char *heredoc, t_minishell *mshell)
 	start = 0;
 	fd = 0;
 	end = 0;
-	cmd->cmd = d_calloc((d_count_cmds(args) + 1), sizeof(char *));
+	count = d_count_cmds(args);
+	cmd->cmd = d_calloc((count + 1), sizeof(char *));
 	if (!cmd->cmd)
 		return (1);
 	while (args[i])

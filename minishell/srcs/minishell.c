@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:32:59 by dso               #+#    #+#             */
-/*   Updated: 2022/02/12 15:21:27 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/14 18:24:31 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_input(char **envp, t_minishell *mshell)
 			d_free_tab(test->cmd);
 			if (test->infile)
 				free(test->infile);
-			else if (test->outfile)
+			if (test->outfile)
 				free(test->outfile);
 			test = test->next;
 			free(mshell->cmds);

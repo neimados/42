@@ -10,13 +10,14 @@ SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
 ./srcs/exec/split.c ./srcs/exec/libft.c ./srcs/exec/libft_utils.c \
 ./srcs/builtins/ft_echo.c ./srcs/builtins/ft_env.c ./srcs/builtins/ft_exit.c \
 ./srcs/builtins/ft_pwd.c ./srcs/builtins/ft_export.c ./srcs/builtins/ft_unset.c \
-./srcs/builtins/ft_cd.c ./srcs/signals/ft_signals.c ./srcs/parsing/utils3.c \
-./srcs/parsing/get_next_line.c ./srcs/parsing/get_next_line_utils.c
+./srcs/builtins/ft_cd.c ./srcs/signals/ft_signals.c \
+./srcs/parsing/get_next_line.c ./srcs/parsing/get_next_line_utils.c \
+./srcs/signals/ft_terminal.c ./srcs/parsing/ft_vars_utils.c
 
 OBJS = ${SRC:.c=.o}
 
 CC		= gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
 
 READLINE_LIB	=	-L$(shell brew --prefix readline)/lib
 READLINE_INC	=	-I$(shell brew --prefix readline)/include
