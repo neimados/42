@@ -26,6 +26,20 @@ static void	ft_set_terminal(struct termios *terminal)
 	terminal->c_cc[VEOF] = 4;
 }
 
+static void	ft_set_terminal2(struct termios *terminal)
+{
+	terminal->c_iflag &= ~terminal->c_iflag;
+	terminal->c_iflag |= (ICRNL | IXON | IXANY | IMAXBEL | IUTF8);
+	terminal->c_oflag &= ~terminal->c_oflag;
+	terminal->c_oflag |= (OPOST | ONLCR);
+	terminal->c_cflag &= ~terminal->c_cflag;
+	terminal->c_cflag |= (CREAD | CS8);
+	terminal->c_lflag &= ~terminal->c_lflag;
+	terminal->c_lflag |= (ISIG | ICANON | IEXTEN | ECHO);
+	terminal->c_cc[VINTR] = 3;
+	terminal->c_cc[VEOF] = 4;
+}
+
 static	void	d_terminal_error(void)
 {
 	d_putstr_fd("Terminal error\n", 2);
@@ -40,15 +54,19 @@ void	ft_terminal(int echo)
 	{
 		if (tcgetattr(STDIN_FILENO, &terminal) == 0)
 		{
-			ft_set_terminal(&terminal);
 			if (echo == 1)
 			{
-				terminal.c_lflag &= (ISIG | ICANON | IEXTEN
-						| ECHO | ECHOCTL | FLUSHO);
+				ft_set_terminal2(&terminal);
 				terminal.c_cc[VEOF] = ' ';
+				terminal.c_lflag |= (ECHOCTL);
 			}
 			else if (echo == 2)
+			{
+				ft_set_terminal(&terminal);
 				terminal.c_lflag |= (ECHOCTL);
+			}
+			else
+				ft_set_terminal(&terminal);
 			if (tcsetattr(STDIN_FILENO, TCSANOW, &terminal))
 				d_terminal_error();
 		}
