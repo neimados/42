@@ -12,7 +12,8 @@ SRC = ./srcs/minishell.c ./srcs/parsing/ft_parsing.c ./srcs/parsing/utils.c \
 ./srcs/builtins/ft_pwd.c ./srcs/builtins/ft_export.c ./srcs/builtins/ft_unset.c \
 ./srcs/builtins/ft_cd.c ./srcs/signals/ft_signals.c \
 ./srcs/parsing/get_next_line.c ./srcs/parsing/get_next_line_utils.c \
-./srcs/signals/ft_terminal.c ./srcs/parsing/ft_vars_utils.c
+./srcs/signals/ft_terminal.c ./srcs/parsing/ft_vars_utils.c ./srcs/parsing/ft_heredoc_utils.c \
+./srcs/parsing/ft_cmds_utils.c ./srcs/parsing/ft_args_utils.c
 
 OBJS = ${SRC:.c=.o}
 

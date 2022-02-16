@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/28 17:05:49 by kmammeri          #+#    #+#             */
-/*   Updated: 2022/02/14 18:26:38 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/15 18:10:34 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,7 @@ void	k_loop_forks(t_minishell *minishell)
 		waitpid(forks[i], stat, 0);
 		if (i == j)
 		{
-			if (d_strncmp(g_error[0], "130", 3) != 0)
+			if (d_strncmp(g_error[0], "130", 3) != 0 && WEXITSTATUS(stat[0]) != 2)
 			{
 				free(g_error[0]);
 				g_error[0] = d_itoa(WEXITSTATUS(stat[0]));
@@ -326,6 +326,5 @@ void	k_loop_forks(t_minishell *minishell)
 	free(forks);
 	signal(SIGINT, sigint_handler);
 	ft_terminal(0);
-	// ft_signal(SIGINT, ft_handle_signal);
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: dso <dso@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 18:24:12 by dso               #+#    #+#             */
-/*   Updated: 2022/02/14 17:03:42 by dso              ###   ########.fr       */
+/*   Updated: 2022/02/16 14:49:37 by dso              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,16 @@ struct s_cmds
 
 struct s_parsing
 {
-	int	i;
-	int	j;
-	int	k;
-	int	sign;
+	int		i;
+	int		j;
+	int		k;
+	int		l;
+	int		sign;
+	int		in;
+	int		out;
+	int		end;
+	int		start;
+	char	*tmp;
 };
 
 struct s_minishell
@@ -91,9 +97,14 @@ int		d_count_tab(char **tmp);
 int		d_check_quotes(char *input, t_minishell *mshell);
 int		d_check_end(char *input);
 int		d_count_cmds(char **args);
-void	d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
+int		d_count_cmds(char **args);
+int		d_put_cmds(char **args, t_cmds *cmd, t_minishell *mshell);
+char	*d_trim_cmd(char *to_trim);
 char	*d_create_heredoc(int i);
 int		d_start_heredoc(char *hd_stop, char *heredoc, t_minishell *mshell);
+int		d_check_hd_quotes(char *hd_stop, char c);
+char	*d_trim_hdstop(char *hd_stop);
+int		d_fork_error_heredoc(char *stop);
 char	*d_check_vars(char *tmp, t_minishell *mshell);
 char	*d_check_path(char *variable, char *env);
 char	*d_var_err(void);
